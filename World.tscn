@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://cbyv0o141ycl8"]
+[gd_scene load_steps=7 format=4 uid="uid://cbyv0o141ycl8"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_2dftf"]
 [ext_resource type="Script" path="res://World.gd" id="1_bcbcq"]
@@ -12,9 +12,6 @@ point_count = 3
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2dftf"]
 radius = 19.0
 height = 108.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pbbsc"]
-bg_color = Color(0, 0, 0, 0.266667)
 
 [node name="World" type="Node"]
 script = ExtResource("1_bcbcq")
@@ -44,13 +41,15 @@ shape = SubResource("CapsuleShape2D_2dftf")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
-[node name="Debug" type="Label" parent="."]
+[node name="Overlay" type="CanvasLayer" parent="."]
+
+[node name="Debug" type="Label" parent="Overlay"]
 custom_minimum_size = Vector2(150, 0)
 offset_left = 7.0
 offset_top = 5.0
 offset_right = 157.0
 offset_bottom = 80.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_pbbsc")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "FPS: 144
 Speed: 0
 Turn Speed: 0"
