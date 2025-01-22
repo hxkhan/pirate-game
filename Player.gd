@@ -19,7 +19,7 @@ func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	
 	# Invert x input on reverse
-	if input_dir.y > 0: # and speed <= 0
+	if speed < 0:
 		input_dir.x = -input_dir.x
 	
 	# Calculate speeed
