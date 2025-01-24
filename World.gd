@@ -15,7 +15,7 @@ func _process(_delta: float) -> void:
 	
 	# Send our own position if we have connected peers
 	if role_selected and multiplayer.get_peers():
-		update_pos.rpc($Player.position)
+		update_transform.rpc($Player.position, $Player.rotation)
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
@@ -52,9 +52,6 @@ func peer_connected(peer):
 	var inst = opp.instantiate()
 	inst.set_name(str(peer))
 	add_child(inst)
-	
-	# tell our own position
-	update_pos.rpc_id(peer, $Player.position)
 
 func peer_disconnected(peer):
 	print("Disconnected from peer with ID:", peer)
@@ -67,6 +64,7 @@ func peer_disconnected(peer):
 		multiplayer.multiplayer_peer.close()
 
 @rpc("any_peer", "unreliable_ordered")
-func update_pos(pos):
+func update_transform(pos, rot):
 	var id = str(multiplayer.get_remote_sender_id())
 	get_node(id).position = pos
+	get_node(id).rotation = rot
