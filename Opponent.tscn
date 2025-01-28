@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://cgwmn6fdkcox2"]
+[gd_scene load_steps=2 format=3 uid="uid://bcr0meg0wqsyr"]
 
 [ext_resource type="Texture2D" uid="uid://cll6h5ygdyloj" path="res://PNG/Default size/Ships/ship (6).png" id="1_r23ff"]
 
-[node name="Opponent" type="Node2D"]
+[node name="Opponent" type="CharacterBody2D"]
+motion_mode = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 rotation = -1.5708
 texture = ExtResource("1_r23ff")
+
+[node name="CollisionShape" type="CollisionPolygon2D" parent="."]
+position = Vector2(19.2846, -6.25699e-05)
+rotation = -1.5708
+scale = Vector2(1, 2.72846)
+polygon = PackedVector2Array(0.000198364, -25.7598, 14.0002, -24.2938, 22.0002, -21.3617, 18.9999, 2.09478, 9.99985, 9.79143, -0.000183105, 13.4565, -10.0002, 9.7914, -19.0001, 2.09473, -21.9998, -20.9953, -13.9998, -24.2938)
+
+[node name="Camera" type="Camera2D" parent="."]
