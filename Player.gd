@@ -10,11 +10,13 @@ signal shoot_cannon(dir_vector:Vector2)
 
 var turn_radius: float = 0
 var speed: float = 0
-
+var last_position: Vector2
 var cannon_ball_recharged = true
 
 func _ready() -> void:
-	pass
+	var cursor_texture = load("res://cursor2.png")
+	var hotspot = cursor_texture.get_size() / 2
+	Input.set_custom_mouse_cursor(cursor_texture, Input.CURSOR_ARROW, hotspot)
 
 func _process(_delta: float) -> void:
 	pass
@@ -29,6 +31,12 @@ func _input(event: InputEvent) -> void:
 		print("still recharging")
 
 func _physics_process(delta: float) -> void:
+	# Detect standstill collision
+	if is_on_wall():
+		if (last_position - position).length() < 0.1:
+			speed = 0
+	last_position = position
+	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	
 	# Invert x input on reverse
