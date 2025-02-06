@@ -6,6 +6,8 @@ extends CharacterBody2D
 @export var drag: int = 20
 @export var turn_radius_curve: Curve
 
+signal shoot_cannon(dir_vector:Vector2)
+
 var turn_radius: float = 0
 var speed: float = 0
 
@@ -14,6 +16,11 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	pass
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var dir_vector = (get_global_mouse_position() - position).normalized()
+		shoot_cannon.emit(dir_vector)
 
 func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")

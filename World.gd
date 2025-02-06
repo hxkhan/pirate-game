@@ -3,6 +3,7 @@ extends Node
 var show_debug: bool = true
 var role_selected: bool = false
 var opp = preload("res://Opponent.tscn")
+var cannon_ball = preload("res://CannonBall.tscn")
 
 func _ready():
 	multiplayer.peer_connected.connect(peer_connected)
@@ -68,3 +69,10 @@ func update_transform(pos, rot):
 	var id = str(multiplayer.get_remote_sender_id())
 	get_node(id).position = pos
 	get_node(id).rotation = rot
+
+
+func on_player_shoot_cannon(dir_vector: Vector2) -> void:
+	var cannon_shot = cannon_ball.instantiate()
+	cannon_shot.position = $Player.position
+	cannon_shot.shot_dir = dir_vector
+	add_child(cannon_shot)
