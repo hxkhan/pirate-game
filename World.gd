@@ -70,7 +70,6 @@ func update_transform(pos, rot):
 	get_node(id).position = pos
 	get_node(id).rotation = rot
 
-
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
 	var cannon_shot = cannon_ball.instantiate()
 	cannon_shot.position = $Player.position

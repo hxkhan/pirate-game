@@ -14,3 +14,8 @@ shape = SubResource("CircleShape2D_pqboe")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_g3118")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.666
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

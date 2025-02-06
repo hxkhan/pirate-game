@@ -11,6 +11,8 @@ signal shoot_cannon(dir_vector:Vector2)
 var turn_radius: float = 0
 var speed: float = 0
 
+var cannon_ball_recharged = true
+
 func _ready() -> void:
 	pass
 
@@ -19,8 +21,11 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var dir_vector = (get_global_mouse_position() - position).normalized()
-		shoot_cannon.emit(dir_vector)
+		if cannon_ball_recharged:
+			var dir_vector = (get_global_mouse_position() - position).normalized()
+			shoot_cannon.emit(dir_vector)
+			cannon_ball_recharged = false
+			$CannonBallTimer.start()
 
 func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
@@ -49,3 +54,7 @@ func _physics_process(delta: float) -> void:
 	
 	velocity = direction * speed
 	move_and_slide()
+
+
+func _on_cannon_ball_timer_timeout() -> void:
+	cannon_ball_recharged = true

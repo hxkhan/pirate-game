@@ -23,3 +23,8 @@ scale = Vector2(1, 2.72846)
 polygon = PackedVector2Array(0.000198364, -25.7598, 14.0002, -24.2938, 22.0002, -21.3617, 18.9999, 2.09478, 9.99985, 9.79143, -0.000183105, 13.4565, -10.0002, 9.7914, -19.0001, 2.09473, -21.9998, -20.9953, -13.9998, -24.2938)
 
 [node name="Camera" type="Camera2D" parent="."]
+
+[node name="CannonBallTimer" type="Timer" parent="."]
+wait_time = 0.666
+
+[connection signal="timeout" from="CannonBallTimer" to="." method="_on_cannon_ball_timer_timeout"]
