@@ -72,6 +72,6 @@ func update_transform(pos, rot):
 
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
 	var cannon_shot = cannon_ball.instantiate()
-	cannon_shot.position = $Player.position
+	cannon_shot.position = $Player.position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
 	add_child(cannon_shot)

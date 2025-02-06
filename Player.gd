@@ -26,6 +26,7 @@ func _input(event: InputEvent) -> void:
 			shoot_cannon.emit(dir_vector)
 			cannon_ball_recharged = false
 			$CannonBallTimer.start()
+		print("still recharging")
 
 func _physics_process(delta: float) -> void:
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
@@ -54,7 +55,6 @@ func _physics_process(delta: float) -> void:
 	
 	velocity = direction * speed
 	move_and_slide()
-
 
 func _on_cannon_ball_timer_timeout() -> void:
 	cannon_ball_recharged = true
