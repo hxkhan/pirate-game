@@ -70,7 +70,16 @@ func update_transform(pos, rot):
 	get_node(id).position = pos
 	get_node(id).rotation = rot
 
+@rpc("any_peer", "reliable")
+func enemy_shoot_cannon(dir_vector: Vector2) -> void:
+	var id = str(multiplayer.get_remote_sender_id())
+	var cannon_shot = cannon_ball.instantiate()
+	cannon_shot.position = get_node(id).position + dir_vector * 30
+	cannon_shot.shot_dir = dir_vector
+	add_child(cannon_shot)
+
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
+	enemy_shoot_cannon.rpc(dir_vector)
 	var cannon_shot = cannon_ball.instantiate()
 	cannon_shot.position = $Player.position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
