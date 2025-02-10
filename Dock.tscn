@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4kd1xnxoe828"]
+
+[ext_resource type="Texture2D" uid="uid://dhkm5r4qo02c6" path="res://PNG/Default size/Ship parts/wood (2).png" id="1_nngwp"]
+
+[node name="Dock" type="Node2D"]
+
+[node name="Woodpart" type="Sprite2D" parent="."]
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart2" type="Sprite2D" parent="."]
+position = Vector2(0, 10)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart3" type="Sprite2D" parent="."]
+position = Vector2(0, -10)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart4" type="Sprite2D" parent="."]
+position = Vector2(0, -30)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart5" type="Sprite2D" parent="."]
+position = Vector2(0, -20)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart6" type="Sprite2D" parent="."]
+position = Vector2(0, -40)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart7" type="Sprite2D" parent="."]
+position = Vector2(0, 30)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart8" type="Sprite2D" parent="."]
+position = Vector2(0, 40)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart9" type="Sprite2D" parent="."]
+position = Vector2(0, 20)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart10" type="Sprite2D" parent="."]
+position = Vector2(0, -60)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart11" type="Sprite2D" parent="."]
+position = Vector2(0, -50)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart12" type="Sprite2D" parent="."]
+position = Vector2(0, -70)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart13" type="Sprite2D" parent="."]
+position = Vector2(0, 60)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart14" type="Sprite2D" parent="."]
+position = Vector2(0, 70)
+texture = ExtResource("1_nngwp")
+
+[node name="Woodpart15" type="Sprite2D" parent="."]
+position = Vector2(0, 50)
+texture = ExtResource("1_nngwp")
