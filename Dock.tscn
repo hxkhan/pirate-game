@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4kd1xnxoe828"]
+[gd_scene load_steps=4 format=3 uid="uid://c4kd1xnxoe828"]
 
 [ext_resource type="Texture2D" uid="uid://dhkm5r4qo02c6" path="res://PNG/Default size/Ship parts/wood (2).png" id="1_nngwp"]
+[ext_resource type="Script" path="res://Dock.gd" id="1_om6uf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfhxv"]
 size = Vector2(26, 150)
@@ -8,6 +9,7 @@ size = Vector2(26, 150)
 [node name="Dock" type="Node2D"]
 light_mask = 3
 visibility_layer = 3
+script = ExtResource("1_om6uf")
 
 [node name="Woodpart" type="Sprite2D" parent="."]
 texture = ExtResource("1_nngwp")
