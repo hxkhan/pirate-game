@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://cll6h5ygdyloj" path="res://PNG/Default size/Ships/ship (6).png" id="1_r23ff"]
 
 [node name="Opponent" type="CharacterBody2D"]
+collision_layer = 3
+collision_mask = 3
 motion_mode = 1
 
 [node name="Sprite" type="Sprite2D" parent="."]
