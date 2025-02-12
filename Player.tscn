@@ -8,8 +8,6 @@ _data = [Vector2(0, 0.1), 0.0, 1.8, 0, 1, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vecto
 point_count = 3
 
 [node name="Player" type="CharacterBody2D"]
-collision_layer = 3
-collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_ra4s1")
 turn_radius_curve = SubResource("Curve_bcbcq")

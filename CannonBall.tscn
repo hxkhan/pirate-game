@@ -7,8 +7,6 @@
 radius = 5.0
 
 [node name="CannonBall" type="Area2D"]
-collision_layer = 2
-collision_mask = 2
 script = ExtResource("1_okhxw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
