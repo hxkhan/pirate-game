@@ -1,6 +1,7 @@
 extends Area2D
 
-var shot_dir : Vector2 
+var shot_dir : Vector2
+var shooter : CharacterBody2D
 var speed = 300
 var shooter: Node2D
 var damage = 50
@@ -36,6 +37,8 @@ func on_explosion_timer_timeout() -> void:
 		queue_free()
 
 func _on_body_entered(body: Node2D) -> void:
-	if shooter != body:
+	if body == shooter:
+		return
+	if body is CharacterBody2D or body.name == "Dock":
 		$Timer.stop()
 		_on_timer_timeout()

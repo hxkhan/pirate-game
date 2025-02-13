@@ -19,8 +19,11 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=1440
 window/size/viewport_height=810
+<<<<<<< HEAD
 window/stretch/mode="canvas_items"
 window/stretch/scale=2.02
+=======
+>>>>>>> e7d590193d09af716ff4ae1f981ae42b343ac1de
 
 [input]
 
