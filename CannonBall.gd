@@ -3,7 +3,6 @@ extends Area2D
 var shot_dir : Vector2
 var shooter : CharacterBody2D
 var speed = 300
-var shooter: Node2D
 var damage = 50
 
 var explosion_scene1 = preload("res://PNG/Default size/Effects/explosion1.png")
