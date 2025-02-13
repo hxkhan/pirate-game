@@ -2,7 +2,7 @@ extends Area2D
 
 var shot_dir : Vector2
 var shooter : CharacterBody2D
-var speed = 300
+var speed = 200
 var damage = 50
 
 # Called when the node enters the scene tree for the first time.
