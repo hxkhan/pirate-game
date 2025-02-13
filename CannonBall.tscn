@@ -1,13 +1,58 @@
-[gd_scene load_steps=4 format=3 uid="uid://bd2soux0uk2o3"]
+[gd_scene load_steps=10 format=3 uid="uid://bahlnkjlfq7y2"]
 
 [ext_resource type="Texture2D" uid="uid://d33pjaaas03p2" path="res://PNG/Default size/Ship parts/cannonBall.png" id="1_g3118"]
 [ext_resource type="Script" path="res://CannonBall.gd" id="1_okhxw"]
+[ext_resource type="Texture2D" uid="uid://c1p2bbv1ouuwd" path="res://PNG/Default size/Effects/explosion1.png" id="3_jsj8a"]
+[ext_resource type="Texture2D" uid="uid://tutefdttcuqy" path="res://PNG/Default size/Effects/explosion2.png" id="4_yk260"]
+[ext_resource type="Texture2D" uid="uid://frmlyi4uxigf" path="res://PNG/Default size/Effects/explosion3.png" id="5_mxwpv"]
+
+[sub_resource type="Animation" id="Animation_knebg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_g3118")]
+}
+
+[sub_resource type="Animation" id="Animation_tbsx8"]
+resource_name = "contact_solid"
+length = 0.22
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("3_jsj8a"), ExtResource("4_yk260"), ExtResource("5_mxwpv")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f7fbg"]
+_data = {
+"RESET": SubResource("Animation_knebg"),
+"contact_solid": SubResource("Animation_tbsx8")
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pqboe"]
 radius = 5.0
 
 [node name="CannonBall" type="Area2D"]
 script = ExtResource("1_okhxw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_f7fbg")
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_pqboe")
@@ -18,10 +63,7 @@ texture = ExtResource("1_g3118")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 1.666
 
-[node name="ExplosionTimer" type="Timer" parent="."]
-wait_time = 0.08
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="." to="." method="on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="on_animation_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="ExplosionTimer" to="." method="on_explosion_timer_timeout"]
