@@ -90,11 +90,12 @@ func on_player_shoot_cannon(dir_vector: Vector2) -> void:
 	
 func _on_player_shoot_special(right_side: bool) -> void:
 	var node
+	var special = special_attack.instantiate()
 	if right_side:
 		node = $Player.get_node("ESpecialAttack")
+		special.rotation = $Player.rotation
 	else:
 		node = $Player.get_node("QSpecialAttack")
-	var special = special_attack.instantiate()
+		special.rotation = $Player.rotation + deg_to_rad(180)
 	special.position = node.global_position
-	special.rotation = $Player.rotation
 	add_child(special)
