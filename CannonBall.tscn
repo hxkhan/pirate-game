@@ -21,6 +21,7 @@ texture = ExtResource("1_g3118")
 wait_time = 1.666
 
 [node name="ExplosionTimer" type="Timer" parent="."]
+wait_time = 0.08
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
