@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=4 uid="uid://cbyv0o141ycl8"]
+[gd_scene load_steps=6 format=4 uid="uid://cbyv0o141ycl8"]
 
 [ext_resource type="Script" path="res://World.gd" id="1_bcbcq"]
 [ext_resource type="TileSet" uid="uid://48g4cfmudeaq" path="res://TileSet.tres" id="2_1a5yo"]
 [ext_resource type="PackedScene" uid="uid://dnga6xjdext2c" path="res://Player.tscn" id="3_hhmfa"]
 [ext_resource type="PackedScene" uid="uid://c4kd1xnxoe828" path="res://Dock.tscn" id="4_3wd62"]
+[ext_resource type="PackedScene" uid="uid://bhen3516ydv8o" path="res://SpecialAttack.tscn" id="5_7je21"]
 
 [node name="World" type="Node"]
 script = ExtResource("1_bcbcq")
@@ -57,4 +58,8 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Press 'H' to host or 'J' to join!"
 horizontal_alignment = 2
 
+[node name="Node2D" parent="." instance=ExtResource("5_7je21")]
+position = Vector2(2985, 2284)
+
 [connection signal="shoot_cannon" from="Player" to="." method="on_player_shoot_cannon"]
+[connection signal="shoot_special" from="Player" to="." method="_on_player_shoot_special"]

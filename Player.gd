@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var turn_radius_curve: Curve
 
 signal shoot_cannon(dir_vector:Vector2)
+signal shoot_special()
 
 var turn_radius: float = 0
 var speed: float = 0
@@ -29,6 +30,12 @@ func _input(event: InputEvent) -> void:
 			cannon_ball_recharged = false
 			$CannonBallTimer.start()
 		print("still recharging")
+	if event is InputEventKey and event.pressed:
+		match event.keycode:
+			KEY_E:
+				shoot_special.emit(true)
+			KEY_Q:
+				shoot_special.emit(false)
 
 func _physics_process(delta: float) -> void:
 	# Detect standstill collision

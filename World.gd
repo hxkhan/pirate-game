@@ -4,6 +4,7 @@ var show_debug: bool = true
 var role_selected: bool = false
 var opp = preload("res://Opponent.tscn")
 var cannon_ball = preload("res://CannonBall.tscn")
+var special_attack = preload("res://SpecialAttack.tscn")
 
 func _ready():
 	multiplayer.peer_connected.connect(peer_connected)
@@ -86,3 +87,14 @@ func on_player_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.position = $Player.position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
 	add_child(cannon_shot)
+	
+func _on_player_shoot_special(right_side: bool) -> void:
+	var node
+	if right_side:
+		node = $Player.get_node("ESpecialAttack")
+	else:
+		node = $Player.get_node("QSpecialAttack")
+	var special = special_attack.instantiate()
+	special.position = node.global_position
+	special.rotation = $Player.rotation
+	add_child(special)

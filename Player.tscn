@@ -27,4 +27,10 @@ polygon = PackedVector2Array(0.000198364, -25.7598, 14.0002, -24.2938, 22.0002, 
 [node name="CannonBallTimer" type="Timer" parent="."]
 wait_time = 0.666
 
+[node name="ESpecialAttack" type="Node2D" parent="."]
+position = Vector2(0, 50)
+
+[node name="QSpecialAttack" type="Node2D" parent="."]
+position = Vector2(0, -50)
+
 [connection signal="timeout" from="CannonBallTimer" to="." method="_on_cannon_ball_timer_timeout"]
