@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=3 uid="uid://cudchywmvns5i"]
+
+[ext_resource type="Script" path="res://Menu.gd" id="1_iak7f"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iak7f")
+
+[node name="GameModeOptions" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.0
+offset_top = -92.0
+offset_right = 121.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonFFA" type="Button" parent="GameModeOptions"]
+layout_mode = 2
+text = "Free For All (4 Players)"
+
+[node name="ButtonBR" type="Button" parent="GameModeOptions"]
+layout_mode = 2
+disabled = true
+text = "Battle Royale"
+
+[node name="ModeOptions" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.0
+offset_top = -92.0
+offset_right = 121.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonHost" type="Button" parent="ModeOptions"]
+layout_mode = 2
+text = "Host"
+
+[node name="ButtonJoin" type="Button" parent="ModeOptions"]
+layout_mode = 2
+text = "Join"
+
+[node name="IPOptions" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -121.0
+offset_top = -92.0
+offset_right = 121.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LineEditIP" type="LineEdit" parent="IPOptions"]
+layout_mode = 2
+text = "localhost"
+
+[node name="HBox" type="HBoxContainer" parent="IPOptions"]
+layout_mode = 2
+
+[node name="ButtonBack" type="Button" parent="IPOptions/HBox"]
+layout_mode = 2
+text = "Back"
+
+[node name="ButtonStartJoin" type="Button" parent="IPOptions/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start"
+
+[connection signal="button_up" from="GameModeOptions/ButtonFFA" to="." method="on_button_ffa_button_up"]
+[connection signal="button_up" from="ModeOptions/ButtonHost" to="." method="on_button_host_up"]
+[connection signal="button_up" from="ModeOptions/ButtonJoin" to="." method="on_button_join_up"]
+[connection signal="button_up" from="IPOptions/HBox/ButtonBack" to="." method="on_button_back_from_join_up"]
+[connection signal="button_up" from="IPOptions/HBox/ButtonStartJoin" to="." method="on_button_start_join_up"]

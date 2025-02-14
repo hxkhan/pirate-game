@@ -1,7 +1,10 @@
 extends Node
 
+
+@export var ip_address: String
+@export var host: bool
+
 var show_debug: bool = true
-var role_selected: bool = false
 var opp = preload("res://Opponent.tscn")
 var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
@@ -9,6 +12,21 @@ var special_attack = preload("res://SpecialAttack.tscn")
 func _ready():
 	multiplayer.peer_connected.connect(peer_connected)
 	multiplayer.peer_disconnected.connect(peer_disconnected)
+	
+	if host:
+		$Overlay/Message.hide()
+		print("Host on :8869")
+		var enet = ENetMultiplayerPeer.new()
+		var status = enet.create_server(8869)
+		print(error_string(status))
+		multiplayer.set_multiplayer_peer(enet)
+	else:
+		$Overlay/Message.hide()
+		print("Join " + ip_address + ":" + "8869")
+		var enet = ENetMultiplayerPeer.new()
+		var status = enet.create_client(ip_address, 8869)
+		print(error_string(status))
+		multiplayer.set_multiplayer_peer(enet)
 
 func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
@@ -16,7 +34,7 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
 	
 	# Send our own position if we have connected peers
-	if role_selected and multiplayer.get_peers():
+	if multiplayer.get_peers():
 		update_transform.rpc($Player.position, $Player.rotation)
 
 func _input(event):
@@ -28,24 +46,6 @@ func _input(event):
 			else:
 				$Overlay/Debug.show()
 				show_debug = true
-		
-		if event.keycode == KEY_H and !role_selected:
-			role_selected = true
-			$Overlay/Message.hide()
-			
-			var enet = ENetMultiplayerPeer.new()
-			var status = enet.create_server(8869)
-			print(error_string(status))
-			multiplayer.set_multiplayer_peer(enet)
-			
-		elif event.keycode == KEY_J and !role_selected:
-			role_selected = true
-			$Overlay/Message.hide()
-			
-			var enet = ENetMultiplayerPeer.new()
-			var status = enet.create_client("localhost", 8869)
-			print(error_string(status))
-			multiplayer.set_multiplayer_peer(enet)
 
 func peer_connected(peer):
 	print("Connected to peer with ID:", peer)
@@ -81,7 +81,9 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 	add_child(cannon_shot)
 
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
-	enemy_shoot_cannon.rpc(dir_vector)
+	if multiplayer.get_peers():
+		enemy_shoot_cannon.rpc(dir_vector)
+	
 	var cannon_shot = cannon_ball.instantiate()
 	cannon_shot.shooter = $Player
 	cannon_shot.position = $Player.position + dir_vector * 30
