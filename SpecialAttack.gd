@@ -16,8 +16,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
-
 func _on_spawn_timer_timeout() -> void:
 	if curr_sprite == 1:
 		curr_sprite = curr_sprite + 1
@@ -28,6 +26,7 @@ func _on_spawn_timer_timeout() -> void:
 	elif curr_sprite == 3:
 		curr_sprite = curr_sprite + 1
 		$Magic.texture = sprite4
+		$SpawnTimer.wait_time = 0.2
 	elif curr_sprite == 4:
 		curr_sprite = curr_sprite + 1
 		$Magic.texture = sprite5
