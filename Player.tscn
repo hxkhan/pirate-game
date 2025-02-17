@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dnga6xjdext2c"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_ra4s1"]
-[ext_resource type="Texture2D" uid="uid://cll6h5ygdyloj" path="res://PNG/Default size/Ships/ship (6).png" id="2_s206f"]
+[ext_resource type="Texture2D" uid="uid://l21oxh8t4u28" path="res://PNG/Default size/Ships/ship (1).png" id="2_cp13n"]
 
 [sub_resource type="Curve" id="Curve_bcbcq"]
 _data = [Vector2(0, 0.1), 0.0, 1.8, 0, 1, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), -0.5, 0.0, 1, 0]
@@ -14,7 +14,7 @@ turn_radius_curve = SubResource("Curve_bcbcq")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 rotation = -1.5708
-texture = ExtResource("2_s206f")
+texture = ExtResource("2_cp13n")
 
 [node name="CollisionShape" type="CollisionPolygon2D" parent="."]
 position = Vector2(19.2846, -6.25699e-05)

@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+@export var skin: String = "WHITE"
+@export var health: int = 100
+@export var max_health: int = 100
+
 @export var acceleration: int = 45
 @export var max_speed: int = 100
 @export var turn_speed: int = 40
@@ -8,6 +12,7 @@ extends CharacterBody2D
 
 signal shoot_cannon(dir_vector:Vector2)
 signal shoot_special()
+signal we_died()
 
 var turn_radius: float = 0
 var speed: float = 0
@@ -81,3 +86,17 @@ func _on_cannon_ball_timer_timeout() -> void:
 
 func _on_special_timer_timeout() -> void:
 	special_recharged = true
+
+func take_damage(amount: int) -> String:
+	health -= amount
+	var percent = (float(health)/max_health) * 100
+	var skin_dir = ""
+	if percent <= 0:
+		skin_dir = Globals.skin_names[skin][3]
+		we_died.emit()
+	elif percent <= 25:
+		skin_dir = Globals.skin_names[skin][2]
+	elif percent <= 75:
+		skin_dir = Globals.skin_names[skin][1]
+	$Sprite.texture = load(skin_dir)
+	return skin_dir

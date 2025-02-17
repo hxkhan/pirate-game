@@ -1,6 +1,5 @@
 extends Node
 
-
 @export var ip_address: String
 @export var host: bool
 
@@ -32,6 +31,7 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
 	$Overlay/Debug.text += "\nSpeed: " + str(round($Player.speed))
 	$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
+	$Overlay/Debug.text += "\nHealth: " + str($Player.health)
 	
 	# Send our own position if we have connected peers
 	if multiplayer.get_peers():
@@ -78,6 +78,7 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.shooter = get_node(id)
 	cannon_shot.position = get_node(id).position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
+	cannon_shot.hit_us.connect(we_have_been_hit_with_cannon)
 	add_child(cannon_shot)
 
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
@@ -99,3 +100,12 @@ func _on_player_shoot_special(right_side: bool) -> void:
 		node = $Player.get_node("QSpecialAttack")
 		special.rotation = deg_to_rad(180)
 	node.add_child(special)
+
+@rpc("any_peer", "reliable")
+func request_change_skin(skin_dir: String):
+	var id = str(multiplayer.get_remote_sender_id())
+	get_node(id).get_node("Sprite").texture = load(skin_dir)
+
+func we_have_been_hit_with_cannon():
+	var skin_dir = $Player.take_damage(25)
+	request_change_skin.rpc(skin_dir)
