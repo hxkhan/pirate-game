@@ -13,6 +13,7 @@ var turn_radius: float = 0
 var speed: float = 0
 var last_position: Vector2
 var cannon_ball_recharged = true
+var special_recharged = true
 
 func _ready() -> void:
 	var cursor_texture = load("res://cursor2.png")
@@ -30,12 +31,16 @@ func _input(event: InputEvent) -> void:
 			cannon_ball_recharged = false
 			$CannonBallTimer.start()
 		print("still recharging")
-	if event is InputEventKey and event.pressed:
+	if event is InputEventKey and event.pressed and special_recharged:
 		match event.keycode:
 			KEY_E:
 				shoot_special.emit(true)
+				special_recharged = false
+				$SpecialTimer.start()
 			KEY_Q:
 				shoot_special.emit(false)
+				special_recharged = false
+				$SpecialTimer.start()
 
 func _physics_process(delta: float) -> void:
 	# Detect standstill collision
@@ -73,3 +78,6 @@ func _physics_process(delta: float) -> void:
 
 func _on_cannon_ball_timer_timeout() -> void:
 	cannon_ball_recharged = true
+
+func _on_special_timer_timeout() -> void:
+	special_recharged = true

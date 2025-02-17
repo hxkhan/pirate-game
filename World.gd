@@ -95,9 +95,7 @@ func _on_player_shoot_special(right_side: bool) -> void:
 	var special = special_attack.instantiate()
 	if right_side:
 		node = $Player.get_node("ESpecialAttack")
-		special.rotation = $Player.rotation
 	else:
 		node = $Player.get_node("QSpecialAttack")
-		special.rotation = $Player.rotation + deg_to_rad(180)
-	special.position = node.global_position
-	add_child(special)
+		special.rotation = deg_to_rad(180)
+	node.add_child(special)
