@@ -101,6 +101,7 @@ func enemy_shoot_special(right_side:bool) -> void:
 	else:
 		special.position = Vector2(0,-50)
 		special.rotation = deg_to_rad(180)
+	special.hit_us.connect(we_have_been_hit_with_special)
 	shooter.add_child(special)
 
 func _on_player_shoot_special(right_side: bool) -> void:
@@ -120,4 +121,8 @@ func request_change_skin(skin_dir: String):
 
 func we_have_been_hit_with_cannon():
 	var skin_dir = $Player.take_damage(25)
+	request_change_skin.rpc(skin_dir)
+
+func we_have_been_hit_with_special():
+	var skin_dir = $Player.take_damage(50)
 	request_change_skin.rpc(skin_dir)

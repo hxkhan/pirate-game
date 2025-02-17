@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhen3516ydv8o"]
+[gd_scene load_steps=4 format=3 uid="uid://bhen3516ydv8o"]
 
 [ext_resource type="Script" path="res://SpecialAttack.gd" id="1_isb5p"]
 [ext_resource type="Texture2D" uid="uid://07cob0gaubsn" path="res://PNG/Kenney Particle Pack/magic_01.png" id="2_qs8xs"]
 
-[node name="SpecialAttack" type="Node2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_bboi0"]
+radius = 16.0
+
+[node name="SpecialAttack" type="Area2D"]
 script = ExtResource("1_isb5p")
 
 [node name="SpawnTimer" type="Timer" parent="."]
@@ -13,4 +16,8 @@ wait_time = 2.0
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_qs8xs")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bboi0")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
