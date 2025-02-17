@@ -84,7 +84,6 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
 	if multiplayer.get_peers():
 		enemy_shoot_cannon.rpc(dir_vector)
-	
 	var cannon_shot = cannon_ball.instantiate()
 	cannon_shot.shooter = $Player
 	cannon_shot.position = $Player.position + dir_vector * 30

@@ -9,12 +9,11 @@ var sprite5 = preload("res://PNG/Kenney Particle Pack/magic_05.png")
 
 var damage = 50
 signal hit_us()
-var does_damage = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$SpawnTimer.start()
-	pass # Replace with function body.
+	$CollisionShape2D.disabled = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -34,11 +33,11 @@ func _on_spawn_timer_timeout() -> void:
 	elif curr_sprite == 4:
 		curr_sprite = curr_sprite + 1
 		$Magic.texture = sprite5
-		does_damage = true
+		$CollisionShape2D.disabled = false
 	else:
 		queue_free()
 	$SpawnTimer.start()
 
 func _on_body_entered(body: Node2D) -> void:
-	if does_damage and body == get_node("root/World/Player"):
+	if !$CollisionShape2D.disabled and body == get_node("/root/World/Player"):
 		hit_us.emit()
