@@ -91,15 +91,27 @@ func on_player_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.shot_dir = dir_vector
 	add_child(cannon_shot)
 	
-func _on_player_shoot_special(right_side: bool) -> void:
-	var node
+@rpc("any_peer", "reliable")
+func enemy_shoot_special(right_side:bool) -> void:
+	var id = str(multiplayer.get_remote_sender_id())
+	var shooter = get_node(id)
 	var special = special_attack.instantiate()
 	if right_side:
-		node = $Player.get_node("ESpecialAttack")
+		special.position = Vector2(0,50)
 	else:
-		node = $Player.get_node("QSpecialAttack")
+		special.position = Vector2(0,-50)
 		special.rotation = deg_to_rad(180)
-	node.add_child(special)
+	shooter.add_child(special)
+
+func _on_player_shoot_special(right_side: bool) -> void:
+	enemy_shoot_special.rpc(right_side)
+	var special = special_attack.instantiate()
+	if right_side:
+		special.position = Vector2(0,50)
+	else:
+		special.position = Vector2(0,-50)
+		special.rotation = deg_to_rad(180)
+	$Player.add_child(special)
 
 @rpc("any_peer", "reliable")
 func request_change_skin(skin_dir: String):
