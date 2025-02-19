@@ -1,7 +1,7 @@
 extends Node
 
-@export var ip_address: String
-@export var host: bool
+var assigned_dock_name: String = "DockAlpha"
+var our_dock: Node2D
 
 var show_debug: bool = true
 var opp = preload("res://Opponent.tscn")
@@ -9,23 +9,23 @@ var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
 
 func _ready():
-	multiplayer.peer_connected.connect(peer_connected)
 	multiplayer.peer_disconnected.connect(peer_disconnected)
+	our_dock = get_node(assigned_dock_name)
 	
-	if host:
-		$Overlay/Message.hide()
-		print("Host on :8869")
-		var enet = ENetMultiplayerPeer.new()
-		var status = enet.create_server(8869)
-		print(error_string(status))
-		multiplayer.set_multiplayer_peer(enet)
-	else:
-		$Overlay/Message.hide()
-		print("Join " + ip_address + ":" + "8869")
-		var enet = ENetMultiplayerPeer.new()
-		var status = enet.create_client(ip_address, 8869)
-		print(error_string(status))
-		multiplayer.set_multiplayer_peer(enet)
+	# Spawn ourselves
+	var us = load("res://Player.tscn").instantiate()
+	us.set_name("Player")
+	us.shoot_cannon.connect(on_player_shoot_cannon)
+	us.shoot_special.connect(_on_player_shoot_special)
+	us.position = our_dock.get_node("Spawn").global_position
+	us.rotation = our_dock.rotation
+	add_child(us)
+	
+	# Spawn opps
+	for peer in multiplayer.get_peers():
+		var inst = opp.instantiate()
+		inst.set_name(str(peer))
+		add_child(inst)
 
 func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
@@ -46,14 +46,6 @@ func _input(event):
 			else:
 				$Overlay/Debug.show()
 				show_debug = true
-
-func peer_connected(peer):
-	print("Connected to peer with ID:", peer)
-	
-	# spawn player
-	var inst = opp.instantiate()
-	inst.set_name(str(peer))
-	add_child(inst)
 
 func peer_disconnected(peer):
 	print("Disconnected from peer with ID:", peer)

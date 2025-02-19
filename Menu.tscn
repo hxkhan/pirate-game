@@ -11,7 +11,32 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iak7f")
 
+[node name="NameOption" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.5
+offset_top = -15.5
+offset_right = 95.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LineEditName" type="LineEdit" parent="NameOption"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Choose a name"
+caret_blink = true
+
+[node name="Button" type="Button" parent="NameOption"]
+layout_mode = 2
+text = "Next"
+
 [node name="GameModeOptions" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -88,8 +113,40 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Start"
 
+[node name="Lobby" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.5
+offset_top = -83.0
+offset_right = 174.5
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Lobby"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Lobby"
+
+[node name="HSeparator" type="HSeparator" parent="Lobby"]
+layout_mode = 2
+
+[node name="PlayersList" type="VBoxContainer" parent="Lobby"]
+layout_mode = 2
+
+[node name="ButtonStart" type="Button" parent="Lobby"]
+layout_mode = 2
+text = "Start Game"
+
+[connection signal="button_up" from="NameOption/Button" to="." method="on_name_next"]
 [connection signal="button_up" from="GameModeOptions/ButtonFFA" to="." method="on_button_ffa_button_up"]
 [connection signal="button_up" from="ModeOptions/ButtonHost" to="." method="on_button_host_up"]
 [connection signal="button_up" from="ModeOptions/ButtonJoin" to="." method="on_button_join_up"]
 [connection signal="button_up" from="IPOptions/HBox/ButtonBack" to="." method="on_button_back_from_join_up"]
 [connection signal="button_up" from="IPOptions/HBox/ButtonStartJoin" to="." method="on_button_start_join_up"]
+[connection signal="button_up" from="Lobby/ButtonStart" to="." method="on_start_game"]

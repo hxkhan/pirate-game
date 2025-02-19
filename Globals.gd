@@ -1,5 +1,8 @@
 extends Node
 
+var player_name: String = "Player"
+var connected_players: Dictionary
+
 var white_ships: Array[String] = [
 	"res://PNG/Default size/Ships/ship (1).png",
 	"res://PNG/Default size/Ships/ship (7).png",
