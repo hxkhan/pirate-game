@@ -78,7 +78,7 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.shooter = get_node(id)
 	cannon_shot.position = get_node(id).position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
-	cannon_shot.hit_us.connect(we_have_been_hit_with_cannon)
+	cannon_shot.collide.connect(enemy_cannon_collision)
 	add_child(cannon_shot)
 
 func on_player_shoot_cannon(dir_vector: Vector2) -> void:
@@ -114,14 +114,15 @@ func _on_player_shoot_special(right_side: bool) -> void:
 	$Player.add_child(special)
 
 @rpc("any_peer", "reliable")
-func request_change_skin(skin_dir: String):
+func enemy_health_update(health: int):
 	var id = str(multiplayer.get_remote_sender_id())
-	get_node(id).get_node("Sprite").texture = load(skin_dir)
+	get_node(id).set_health(health)
 
-func we_have_been_hit_with_cannon():
-	var skin_dir = $Player.take_damage(25)
-	request_change_skin.rpc(skin_dir)
+func enemy_cannon_collision(shot: Area2D, body: Node2D):
+	if body == $Player:
+		$Player.take_damage(25)
+		enemy_health_update.rpc($Player.health)
 
 func we_have_been_hit_with_special():
-	var skin_dir = $Player.take_damage(50)
-	request_change_skin.rpc(skin_dir)
+	$Player.take_damage(50)
+	enemy_health_update.rpc($Player.health)

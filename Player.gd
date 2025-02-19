@@ -87,7 +87,7 @@ func _on_cannon_ball_timer_timeout() -> void:
 func _on_special_timer_timeout() -> void:
 	special_recharged = true
 
-func take_damage(amount: int) -> String:
+func take_damage(amount: int):
 	health -= amount
 	var percent = (float(health)/max_health) * 100
 	var skin_dir = ""
@@ -99,4 +99,3 @@ func take_damage(amount: int) -> String:
 	elif percent <= 75:
 		skin_dir = Globals.skin_names[skin][1]
 	$Sprite.texture = load(skin_dir)
-	return skin_dir
