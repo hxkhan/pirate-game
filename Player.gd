@@ -21,9 +21,7 @@ var cannon_ball_recharged = true
 var special_recharged = true
 
 func _ready() -> void:
-	var cursor_texture = load("res://cursor2.png")
-	var hotspot = cursor_texture.get_size() / 2
-	Input.set_custom_mouse_cursor(cursor_texture, Input.CURSOR_ARROW, hotspot)
+	pass
 
 func _process(_delta: float) -> void:
 	pass
@@ -93,9 +91,11 @@ func take_damage(amount: int):
 	var skin_dir = ""
 	if percent <= 0:
 		skin_dir = Globals.skin_names[skin][3]
-		we_died.emit()
 	elif percent <= 25:
 		skin_dir = Globals.skin_names[skin][2]
 	elif percent <= 75:
 		skin_dir = Globals.skin_names[skin][1]
 	$Sprite.texture = load(skin_dir)
+	
+	if health <= 0:
+		we_died.emit()

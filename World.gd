@@ -1,22 +1,28 @@
 extends Node
 
-var assigned_dock_name: String = "DockAlpha"
+var assigned_dock_name: String = "DockDelta"
 var our_dock: Node2D
 
 var show_debug: bool = true
+var player = preload("res://Player.tscn")
 var opp = preload("res://Opponent.tscn")
 var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
 
 func _ready():
+	var cursor_texture = load("res://cursor2.png")
+	var hotspot = cursor_texture.get_size() / 2
+	Input.set_custom_mouse_cursor(cursor_texture, Input.CURSOR_ARROW, hotspot)
+	
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	our_dock = get_node(assigned_dock_name)
 	
 	# Spawn ourselves
-	var us = load("res://Player.tscn").instantiate()
+	var us = player.instantiate()
 	us.set_name("Player")
 	us.shoot_cannon.connect(on_player_shoot_cannon)
 	us.shoot_special.connect(_on_player_shoot_special)
+	us.we_died.connect(we_died)
 	us.position = our_dock.get_node("Spawn").global_position
 	us.rotation = our_dock.rotation
 	add_child(us)
@@ -106,15 +112,22 @@ func _on_player_shoot_special(right_side: bool) -> void:
 	$Player.add_child(special)
 
 @rpc("any_peer", "reliable")
-func enemy_health_update(health: int):
+func peer_health_update(health: int):
 	var id = str(multiplayer.get_remote_sender_id())
 	get_node(id).set_health(health)
 
 func enemy_cannon_collision(shot: Area2D, body: Node2D):
 	if body == $Player:
 		$Player.take_damage(25)
-		enemy_health_update.rpc($Player.health)
+		peer_health_update.rpc($Player.health)
 
 func we_have_been_hit_with_special():
 	$Player.take_damage(50)
-	enemy_health_update.rpc($Player.health)
+	peer_health_update.rpc($Player.health)
+
+func we_died():
+	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
+	$Player.position = our_dock.get_node("Spawn").global_position
+	$Player.rotation = our_dock.rotation
+	$Player.health = $Player.max_health
+	peer_health_update.rpc($Player.health)
