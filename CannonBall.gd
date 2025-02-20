@@ -9,7 +9,9 @@ signal collide(cannon: Area2D, body: Node2D)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	position += shot_dir * speed * delta
+	var direction = shot_dir.dot(get_parent().currWind)
+	position += shot_dir * speed * delta + shot_dir * direction
+
 
 func on_timer_timeout() -> void:
 	speed = 0
