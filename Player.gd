@@ -76,7 +76,9 @@ func _physics_process(delta: float) -> void:
 	rotation += input_dir.x * deg_to_rad(turn_radius) * delta
 	var direction = Vector2(cos(rotation), sin(rotation))
 	
-	velocity = direction * speed
+	var dot_prod = direction.dot(get_parent().currWind)
+	velocity = direction * speed + direction * speed * dot_prod * 0.2
+	print(velocity)
 	move_and_slide()
 
 func _on_cannon_ball_timer_timeout() -> void:

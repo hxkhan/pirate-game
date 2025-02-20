@@ -17,4 +17,6 @@ func set_health(new_health: int):
 		skin_dir = Globals.skin_names[skin][2]
 	elif percent <= 75:
 		skin_dir = Globals.skin_names[skin][1]
+	elif percent > 75:
+		skin_dir = Globals.skin_names[skin][0]
 	$Sprite.texture = load(skin_dir)

@@ -3,6 +3,8 @@ extends Node
 var assigned_dock_name: String = "DockDelta"
 var our_dock: Node2D
 
+var wind_timer: Timer
+var currWind: Vector2 = Vector2(0,0)
 var show_debug: bool = true
 var player = preload("res://Player.tscn")
 var opp = preload("res://Opponent.tscn")
@@ -32,6 +34,15 @@ func _ready():
 		var inst = opp.instantiate()
 		inst.set_name(str(peer))
 		add_child(inst)
+	
+	if multiplayer.is_server():
+		wind_timer = Timer.new()
+		add_child(wind_timer)
+		wind_timer.connect("timeout",Callable(self,"_on_wind_timeout"))
+		wind_timer.wait_time = 3.0
+		wind_timer.start()
+		var rand_angle = randf_range(0, 2 * PI)
+		new_wind.rpc(cos(rand_angle), sin(rand_angle));
 
 func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
@@ -131,3 +142,14 @@ func we_died():
 	$Player.rotation = our_dock.rotation
 	$Player.health = $Player.max_health
 	peer_health_update.rpc($Player.health)
+
+@rpc("authority","reliable","call_local")
+func new_wind(xval: float, yval: float) -> void: 
+	currWind = Vector2(xval, yval)
+
+func _on_wind_timeout() -> void:
+	var xval = clamp(currWind.x + randf_range(-0.25, 0.25), -1, 1)
+	var yval = clamp(currWind.y + randf_range(-0.25, 0.25), -1, 1)
+	new_wind.rpc(xval,yval)
+	print(currWind)
+	wind_timer.start()
