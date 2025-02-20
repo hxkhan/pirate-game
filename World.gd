@@ -151,5 +151,4 @@ func _on_wind_timeout() -> void:
 	var xval = clamp(currWind.x + randf_range(-0.25, 0.25), -1, 1)
 	var yval = clamp(currWind.y + randf_range(-0.25, 0.25), -1, 1)
 	new_wind.rpc(xval,yval)
-	print(currWind)
 	wind_timer.start()

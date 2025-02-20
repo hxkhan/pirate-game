@@ -78,7 +78,6 @@ func _physics_process(delta: float) -> void:
 	
 	var dot_prod = direction.dot(get_parent().currWind)
 	velocity = direction * speed + direction * speed * dot_prod * 0.2
-	print(velocity)
 	move_and_slide()
 
 func _on_cannon_ball_timer_timeout() -> void:
