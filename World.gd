@@ -163,9 +163,8 @@ func _on_wind_timeout() -> void:
 	wind_timer.start()
 
 @rpc("any_peer", "reliable")
-func enemy_dock_died(body: Node2D):
-	print(body)
-	body.queue_free()
+func enemy_dock_died(dock_name: String):
+	print(dock_name + " is now destroyed")
 
 func our_dock_is_dead() -> void:
-	enemy_dock_died.rpc(our_dock)
+	enemy_dock_died.rpc(our_dock.name)
