@@ -165,6 +165,8 @@ func _on_wind_timeout() -> void:
 @rpc("any_peer", "reliable")
 func enemy_dock_died(dock_name: String):
 	print(dock_name + " is now destroyed")
+	var destroyed_dock = get_node(dock_name)
+	destroyed_dock.queue_free()
 
 func our_dock_is_dead() -> void:
 	enemy_dock_died.rpc(our_dock.name)
