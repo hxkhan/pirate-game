@@ -143,6 +143,9 @@ func we_have_been_hit_with_special(body: Node2D):
 		our_dock.take_damage(500)
 
 func we_died():
+	if !our_dock.is_dock_alive:
+		print("You died")
+		return
 	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
 	$Player.position = our_dock.get_node("Spawn").global_position
 	$Player.rotation = our_dock.rotation
