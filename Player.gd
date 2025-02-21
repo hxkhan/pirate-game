@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Calculate speeed
 	speed += acceleration * -input_dir.y * delta
-	speed = clamp(speed, -max_speed/3.0, max_speed)
+	speed = clamp(speed, -max_speed/3.0, max_speed+300)
 	
 	# Calculate drag
 	if input_dir.y == 0:

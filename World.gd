@@ -18,6 +18,7 @@ func _ready():
 	
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	our_dock = get_node(assigned_dock_name)
+	our_dock.dead_dock.connect(our_dock_is_dead)
 	
 	# Spawn ourselves
 	var us = player.instantiate()
@@ -157,3 +158,11 @@ func _on_wind_timeout() -> void:
 	var yval = clamp(currWind.y + randf_range(-0.25, 0.25), -1, 1)
 	new_wind.rpc(xval,yval)
 	wind_timer.start()
+
+@rpc("any_peer", "reliable")
+func enemy_dock_died(body: Node2D):
+	print(body)
+	body.queue_free()
+
+func our_dock_is_dead() -> void:
+	enemy_dock_died.rpc(our_dock)
