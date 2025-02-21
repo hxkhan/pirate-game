@@ -19,6 +19,7 @@ var speed: float = 0
 var last_position: Vector2
 var cannon_ball_recharged = true
 var special_recharged = true
+var our_dock_is_dead: bool = false
 
 func _ready() -> void:
 	pass
@@ -27,6 +28,8 @@ func _process(_delta: float) -> void:
 	pass
 
 func _input(event: InputEvent) -> void:
+	if our_dock_is_dead:
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if cannon_ball_recharged:
 			var dir_vector = (get_global_mouse_position() - position).normalized()
@@ -46,6 +49,8 @@ func _input(event: InputEvent) -> void:
 				$SpecialTimer.start()
 
 func _physics_process(delta: float) -> void:
+	if our_dock_is_dead:
+		return
 	# Detect standstill collision
 	if is_on_wall():
 		if (last_position - position).length() < 0.1:

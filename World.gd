@@ -144,7 +144,6 @@ func we_have_been_hit_with_special(body: Node2D):
 
 func we_died():
 	if !our_dock.is_dock_alive:
-		print("You died")
 		return
 	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
 	$Player.position = our_dock.get_node("Spawn").global_position
@@ -170,3 +169,4 @@ func enemy_dock_died(dock_name: String):
 
 func our_dock_is_dead() -> void:
 	enemy_dock_died.rpc(our_dock.name)
+	$Player.our_dock_is_dead = true

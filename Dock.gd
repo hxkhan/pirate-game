@@ -12,10 +12,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if is_dock_alive and hp <= 0:
-		is_dock_alive = false
 		$Dock/CollisionShape2D.disabled = true
 		$WoodParts.visible = false
 		dead_dock.emit()
+		is_dock_alive = false
 
 
 func take_damage(amount: int) -> void:
