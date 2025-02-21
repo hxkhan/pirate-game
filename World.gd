@@ -131,10 +131,15 @@ func enemy_cannon_collision(shot: Area2D, body: Node2D):
 	if body == $Player:
 		$Player.take_damage(25)
 		peer_health_update.rpc($Player.health)
+	if body.get_parent() == our_dock:
+		our_dock.take_damage(100)
 
-func we_have_been_hit_with_special():
-	$Player.take_damage(50)
-	peer_health_update.rpc($Player.health)
+func we_have_been_hit_with_special(body: Node2D):
+	if body == $Player:
+		$Player.take_damage(50)
+		peer_health_update.rpc($Player.health)
+	if body.get_parent() == our_dock:
+		our_dock.take_damage(500)
 
 func we_died():
 	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
