@@ -150,6 +150,7 @@ func we_died():
 	$Player.rotation = our_dock.rotation
 	$Player.health = $Player.max_health
 	peer_health_update.rpc($Player.health)
+	$Player.we_are_dead = false
 
 @rpc("authority","reliable","call_local")
 func new_wind(xval: float, yval: float) -> void: 

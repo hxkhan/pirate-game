@@ -19,7 +19,8 @@ var speed: float = 0
 var last_position: Vector2
 var cannon_ball_recharged = true
 var special_recharged = true
-var our_dock_is_dead: bool = false
+var we_are_dead: bool = false
+var frogate_tags: int = 1
 
 func _ready() -> void:
 	pass
@@ -28,7 +29,7 @@ func _process(_delta: float) -> void:
 	pass
 
 func _input(event: InputEvent) -> void:
-	if our_dock_is_dead:
+	if we_are_dead:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if cannon_ball_recharged:
@@ -49,7 +50,7 @@ func _input(event: InputEvent) -> void:
 				$SpecialTimer.start()
 
 func _physics_process(delta: float) -> void:
-	if our_dock_is_dead:
+	if we_are_dead:
 		return
 	# Detect standstill collision
 	if is_on_wall():
@@ -104,4 +105,5 @@ func take_damage(amount: int):
 	$Sprite.texture = load(skin_dir)
 	
 	if health <= 0:
+		we_are_dead = true
 		we_died.emit()
