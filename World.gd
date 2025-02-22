@@ -186,4 +186,4 @@ func enemy_dock_died(dock_name: String):
 
 func our_dock_is_dead() -> void:
 	enemy_dock_died.rpc(our_dock.name)
-	$Player.our_dock_is_dead = true
+	$Player.we_are_dead = true
