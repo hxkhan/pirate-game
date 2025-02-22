@@ -51,6 +51,7 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text += "\nSpeed: " + str(round($Player.speed))
 	$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
 	$Overlay/Debug.text += "\nHealth: " + str($Player.health)
+	$Overlay/Debug.text += "\nFrigate Tags: " + str($Player.frigate_tags)
 	
 	# Send our own position if we have connected peers
 	if multiplayer.get_peers():
@@ -159,7 +160,9 @@ func pick_up_frigate_tags(value: int):
 
 func we_died():
 	spawn_frigate_tags_for_enemies.rpc($Player.frigate_tags, $Player.position)
+	$Player.frigate_tags = 1
 	if !our_dock.is_dock_alive:
+		$Player.we_are_dead = true
 		return
 	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
 	$Player.position = our_dock.get_node("Spawn").global_position
@@ -186,4 +189,3 @@ func enemy_dock_died(dock_name: String):
 
 func our_dock_is_dead() -> void:
 	enemy_dock_died.rpc(our_dock.name)
-	$Player.we_are_dead = true
