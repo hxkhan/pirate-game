@@ -148,7 +148,12 @@ func spawn_frigate_tags_for_enemies(tags: int, position: Vector2):
 	var frigate_tags = frigate_tag.instantiate()
 	frigate_tags.value = tags
 	frigate_tags.position = position
+	frigate_tags.pick_up_frigate_tags.connect(pick_up_frigate_tags)
 	add_child(frigate_tags)
+
+func pick_up_frigate_tags(value: int):
+	$Player.frigate_tags += value
+	print($Player.frigate_tags)
 
 func we_died():
 	spawn_frigate_tags_for_enemies.rpc($Player.frigate_tags, $Player.position)
