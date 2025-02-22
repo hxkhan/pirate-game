@@ -20,7 +20,7 @@ var last_position: Vector2
 var cannon_ball_recharged = true
 var special_recharged = true
 var we_are_dead: bool = false
-var frogate_tags: int = 1
+var frigate_tags: int = 1
 
 func _ready() -> void:
 	pass

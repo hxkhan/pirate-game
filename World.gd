@@ -10,6 +10,7 @@ var player = preload("res://Player.tscn")
 var opp = preload("res://Opponent.tscn")
 var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
+var frigate_tag = preload("res://FrigateTag.tscn")
 
 func _ready():
 	var cursor_texture = load("res://cursor2.png")
@@ -142,7 +143,15 @@ func we_have_been_hit_with_special(body: Node2D):
 	if body.get_parent() == our_dock:
 		our_dock.take_damage(500)
 
+@rpc("any_peer","reliable")
+func spawn_frigate_tags_for_enemies(tags: int, position: Vector2):
+	var frigate_tags = frigate_tag.instantiate()
+	frigate_tags.value = tags
+	frigate_tags.position = position
+	add_child(frigate_tags)
+
 func we_died():
+	spawn_frigate_tags_for_enemies.rpc($Player.frigate_tags, $Player.position)
 	if !our_dock.is_dock_alive:
 		return
 	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
