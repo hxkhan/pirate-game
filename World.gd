@@ -145,9 +145,11 @@ func we_have_been_hit_with_special(body: Node2D):
 
 @rpc("any_peer","reliable")
 func spawn_frigate_tags_for_enemies(tags: int, position: Vector2):
+	var id = str(multiplayer.get_remote_sender_id())
 	var frigate_tags = frigate_tag.instantiate()
 	frigate_tags.value = tags
 	frigate_tags.position = position
+	frigate_tags.dropping_opponent = get_node(id)
 	frigate_tags.pick_up_frigate_tags.connect(pick_up_frigate_tags)
 	add_child(frigate_tags)
 
