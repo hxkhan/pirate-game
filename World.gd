@@ -2,6 +2,7 @@ extends Node
 
 var assigned_dock_name: String = "DockDelta"
 var our_dock: Node2D
+var our_kills: int = 0
 
 var wind_timer: Timer
 var currWind: Vector2 = Vector2(0,0)
@@ -19,16 +20,20 @@ func _ready():
 	
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	our_dock = get_node(assigned_dock_name)
-	our_dock.dead_dock.connect(our_dock_is_dead)
+	our_dock.sunk.connect(
+		func():
+			dock_sunk.rpc(assigned_dock_name)
+	)
 	
 	# Spawn ourselves
 	var us = player.instantiate()
 	us.set_name("Player")
-	us.shoot_cannon.connect(on_player_shoot_cannon)
-	us.shoot_special.connect(_on_player_shoot_special)
+	us.shoot_cannon.connect(we_shot_cannon)
+	us.shoot_special.connect(we_shot_special)
 	us.we_died.connect(we_died)
 	us.position = our_dock.get_node("Spawn").global_position
 	us.rotation = our_dock.rotation
+	us.our_dock = our_dock
 	add_child(us)
 	
 	# Spawn opps
@@ -37,7 +42,8 @@ func _ready():
 		inst.set_name(str(peer))
 		add_child(inst)
 	
-	if multiplayer.is_server():
+	if multiplayer.is_server():	
+		# wind
 		wind_timer = Timer.new()
 		add_child(wind_timer)
 		wind_timer.connect("timeout",Callable(self,"_on_wind_timeout"))
@@ -51,7 +57,10 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text += "\nSpeed: " + str(round($Player.speed))
 	$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
 	$Overlay/Debug.text += "\nHealth: " + str($Player.health)
+	$Overlay/Debug.text += "\nDock Health: " + str(our_dock.health)
 	$Overlay/Debug.text += "\nFrigate Tags: " + str($Player.frigate_tags)
+	$Overlay/Debug.text += "\nKills: " + str(our_kills)
+	$Overlay/Debug.text += "\nTime Left: " + str(round($MatchTimer.time_left))
 	
 	# Send our own position if we have connected peers
 	if multiplayer.get_peers():
@@ -93,7 +102,7 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.collide.connect(enemy_cannon_collision)
 	add_child(cannon_shot)
 
-func on_player_shoot_cannon(dir_vector: Vector2) -> void:
+func we_shot_cannon(dir_vector: Vector2) -> void:
 	if multiplayer.get_peers():
 		enemy_shoot_cannon.rpc(dir_vector)
 	var cannon_shot = cannon_ball.instantiate()
@@ -115,7 +124,7 @@ func enemy_shoot_special(right_side:bool) -> void:
 	special.hit_us.connect(we_have_been_hit_with_special)
 	shooter.add_child(special)
 
-func _on_player_shoot_special(right_side: bool) -> void:
+func we_shot_special(right_side: bool) -> void:
 	enemy_shoot_special.rpc(right_side)
 	var special = special_attack.instantiate()
 	if right_side:
@@ -132,7 +141,7 @@ func peer_health_update(health: int):
 
 func enemy_cannon_collision(shot: Area2D, body: Node2D):
 	if body == $Player:
-		$Player.take_damage(25)
+		$Player.take_damage(25, shot.shooter)
 		peer_health_update.rpc($Player.health)
 	if body.get_parent() == our_dock:
 		our_dock.take_damage(100)
@@ -142,7 +151,7 @@ func we_have_been_hit_with_special(body: Node2D):
 		$Player.take_damage(50)
 		peer_health_update.rpc($Player.health)
 	if body.get_parent() == our_dock:
-		our_dock.take_damage(500)
+		our_dock.take_damage(250)
 
 @rpc("any_peer","reliable")
 func spawn_frigate_tags_for_enemies(tags: int, position: Vector2):
@@ -158,18 +167,16 @@ func pick_up_frigate_tags(value: int):
 	$Player.frigate_tags += value
 	print($Player.frigate_tags)
 
-func we_died():
+func we_died(by: CharacterBody2D):
+	kill_confirmed.rpc_id(int(str(by.name)))
 	spawn_frigate_tags_for_enemies.rpc($Player.frigate_tags, $Player.position)
 	$Player.frigate_tags = 1
-	if !our_dock.is_dock_alive:
-		$Player.we_are_dead = true
+	# cannot respawn
+	if our_dock.health <= 0:
+		$Player.input_disabled = true
 		return
-	$Player/Sprite.texture = load(Globals.skin_names[$Player.skin][0])
-	$Player.position = our_dock.get_node("Spawn").global_position
-	$Player.rotation = our_dock.rotation
-	$Player.health = $Player.max_health
+	$Player.reset()
 	peer_health_update.rpc($Player.health)
-	$Player.we_are_dead = false
 
 @rpc("authority","reliable","call_local")
 func new_wind(xval: float, yval: float) -> void: 
@@ -182,10 +189,32 @@ func _on_wind_timeout() -> void:
 	wind_timer.start()
 
 @rpc("any_peer", "reliable")
-func enemy_dock_died(dock_name: String):
+func dock_sunk(dock_name: String):
 	print(dock_name + " is now destroyed")
 	var destroyed_dock = get_node(dock_name)
-	destroyed_dock.queue_free()
+	destroyed_dock.take_damage(500)
 
-func our_dock_is_dead() -> void:
-	enemy_dock_died.rpc(our_dock.name)
+@rpc("any_peer", "reliable")
+func kill_confirmed():
+	our_kills += 1
+
+@rpc("any_peer", "reliable")
+func inform_stats(kills: int):
+	var id = multiplayer.get_remote_sender_id()
+	var container = HBoxContainer.new()
+	var left = Label.new()
+	left.text = Globals.connected_players[id]
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
+	var right = Label.new()
+	right.text = str(kills)
+	container.add_child(left)
+	container.add_child(right)
+	$Overlay/EndGame/Leaderboards.add_child(container)
+
+func on_match_finish():
+	$Player.input_disabled = true
+	$Overlay/EndGame.show()
+	inform_stats.rpc(our_kills)
+	$Overlay/EndGame/Leaderboards/Us/Kills.text = str(our_kills)
+	$Overlay/EndGame/Leaderboards/Us/Name.text = Globals.player_name

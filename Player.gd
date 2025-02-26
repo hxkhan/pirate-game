@@ -12,24 +12,21 @@ extends CharacterBody2D
 
 signal shoot_cannon(dir_vector:Vector2)
 signal shoot_special()
-signal we_died()
+signal we_died(by: CharacterBody2D)
 
 var turn_radius: float = 0
 var speed: float = 0
 var last_position: Vector2
 var cannon_ball_recharged = true
 var special_recharged = true
-var we_are_dead: bool = false
+
+var input_disabled: bool = false
 var frigate_tags: int = 1
 
-func _ready() -> void:
-	pass
-
-func _process(_delta: float) -> void:
-	pass
+var our_dock: Node2D
 
 func _input(event: InputEvent) -> void:
-	if we_are_dead:
+	if input_disabled:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if cannon_ball_recharged:
@@ -50,7 +47,7 @@ func _input(event: InputEvent) -> void:
 				$SpecialTimer.start()
 
 func _physics_process(delta: float) -> void:
-	if we_are_dead:
+	if input_disabled:
 		return
 	# Detect standstill collision
 	if is_on_wall():
@@ -92,7 +89,11 @@ func _on_cannon_ball_timer_timeout() -> void:
 func _on_special_timer_timeout() -> void:
 	special_recharged = true
 
-func take_damage(amount: int):
+func take_damage(amount: int, by: CharacterBody2D):
+	# dont continue to take damage
+	if health <= 0:
+		return
+	
 	health -= amount
 	var percent = (float(health)/max_health) * 100
 	var skin_dir = ""
@@ -105,5 +106,12 @@ func take_damage(amount: int):
 	$Sprite.texture = load(skin_dir)
 	
 	if health <= 0:
-		we_are_dead = true
-		we_died.emit()
+		input_disabled = true
+		we_died.emit(by)
+
+func reset():
+	$Sprite.texture = load(Globals.skin_names[skin][0])
+	position = our_dock.get_node("Spawn").global_position
+	rotation = our_dock.rotation
+	health = max_health
+	input_disabled = false
