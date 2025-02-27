@@ -1,7 +1,7 @@
 extends Control
 
-var world_scene = load("res://World.tscn")
-var world_instance = world_scene.instantiate()
+var small_world = load("res://WorldSmall.tscn")
+var big_world = load("res://World.tscn")
 
 func _ready():
 	multiplayer.peer_connected.connect(peer_connected)
@@ -49,6 +49,7 @@ func on_button_start_join_up():
 			$IPOptions.hide()
 			$Lobby.show()
 			$Lobby/ButtonStart.hide()
+			$Lobby/Options.hide()
 			var lbl = Label.new()
 			lbl.text = "• " + Globals.player_name
 			$Lobby/PlayersList.add_child(lbl)
@@ -76,12 +77,23 @@ func set_player_name(name: String):
 func on_start_game():
 	var docks = ["DockAlpha", "DockBeta", "DockCharlie", "DockDelta"]
 	docks.shuffle()
+	
+	var map = "small"
+	if $Lobby/Options/BigWorldType/CheckButton.button_pressed:
+		map = "big"
+	
+	var world_instance 
+	if map == "small":
+		world_instance = small_world.instantiate()
+	else:
+		world_instance = big_world.instantiate()
+		
 	world_instance.assigned_dock_name = docks[0]
 	
 	# Assign docks to each player
 	var i = 1
 	for peer in multiplayer.get_peers():
-		start_game.rpc_id(peer, docks[i])
+		start_game.rpc_id(peer, map, docks[i])
 		i += 1
 	
 	# Change scene
@@ -91,7 +103,13 @@ func on_start_game():
 
 
 @rpc("authority", "reliable")
-func start_game(dock_name: String):
+func start_game(map: String, dock_name: String):
+	var world_instance 
+	if map == "small":
+		world_instance = small_world.instantiate()
+	else:
+		world_instance = big_world.instantiate()
+		
 	world_instance.assigned_dock_name = dock_name
 	get_tree().root.add_child(world_instance)
 	get_tree().current_scene.queue_free()

@@ -6,6 +6,9 @@ signal sunk()
 func take_damage(amount: int) -> void:
 	health -= amount
 	if health <= 0:
-		$Dock/CollisionShape2D.disabled = true
-		$WoodParts.visible = false
-		sunk.emit()
+		call_deferred("sink")
+
+func sink():
+	$Dock/CollisionShape2D.disabled = true
+	$WoodParts.visible = false
+	sunk.emit()
