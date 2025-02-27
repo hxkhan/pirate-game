@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=4 uid="uid://c4miuw6csc7hb"]
+[gd_scene load_steps=5 format=4 uid="uid://c4miuw6csc7hb"]
 
 [ext_resource type="Script" path="res://World.gd" id="1_i8kwy"]
 [ext_resource type="TileSet" uid="uid://48g4cfmudeaq" path="res://TileSet.tres" id="2_mvckl"]
 [ext_resource type="PackedScene" uid="uid://c4kd1xnxoe828" path="res://Dock.tscn" id="3_i5wha"]
+[ext_resource type="Texture2D" uid="uid://c7cndslg4aoey" path="res://PNG/Wind_Arrow.png" id="4_1ko0e"]
 
 [node name="World" type="Node"]
 script = ExtResource("1_i8kwy")
@@ -171,5 +172,10 @@ text = "player"
 [node name="Kills" type="Label" parent="Overlay/EndGame/Leaderboards/Us"]
 layout_mode = 2
 text = "0"
+
+[node name="WindArrow" type="Sprite2D" parent="Overlay"]
+position = Vector2(1340, 84)
+scale = Vector2(4.75, 5.1875)
+texture = ExtResource("4_1ko0e")
 
 [connection signal="timeout" from="MatchTimer" to="." method="on_match_finish"]

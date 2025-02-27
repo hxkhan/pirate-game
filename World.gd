@@ -61,7 +61,9 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text += "\nFrigate Tags: " + str($Player.frigate_tags)
 	$Overlay/Debug.text += "\nKills: " + str(our_kills)
 	$Overlay/Debug.text += "\nTime Left: " + str(round($MatchTimer.time_left))
-	$Overlay/Debug.text += "\nWind dir: " + str(currWind)
+	$Overlay/Debug.text += "\nWind dir: " + str(currWind.x) + ", " + str(currWind.y)
+	
+	$Overlay/WindArrow.rotation = atan2(currWind.y, currWind.x)
 	
 	# Send our own position if we have connected peers
 	if multiplayer.get_peers():
