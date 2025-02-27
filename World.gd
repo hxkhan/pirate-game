@@ -61,6 +61,7 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text += "\nFrigate Tags: " + str($Player.frigate_tags)
 	$Overlay/Debug.text += "\nKills: " + str(our_kills)
 	$Overlay/Debug.text += "\nTime Left: " + str(round($MatchTimer.time_left))
+	$Overlay/Debug.text += "\nWind dir: " + str(currWind)
 	
 	# Send our own position if we have connected peers
 	if multiplayer.get_peers():
@@ -183,8 +184,9 @@ func new_wind(xval: float, yval: float) -> void:
 	currWind = Vector2(xval, yval)
 
 func _on_wind_timeout() -> void:
-	var rand_angle = randf_range(0, 2 * PI)
-	new_wind.rpc(cos(rand_angle), sin(rand_angle));
+	var xval = clamp(currWind.x + randf_range(-0.25, 0.25), -1, 1)
+	var yval = clamp(currWind.y + randf_range(-0.25, 0.25), -1, 1)
+	new_wind.rpc(xval,yval)
 	wind_timer.start()
 
 @rpc("any_peer", "reliable")
