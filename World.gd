@@ -183,9 +183,8 @@ func new_wind(xval: float, yval: float) -> void:
 	currWind = Vector2(xval, yval)
 
 func _on_wind_timeout() -> void:
-	var xval = clamp(currWind.x + randf_range(-0.25, 0.25), -1, 1)
-	var yval = clamp(currWind.y + randf_range(-0.25, 0.25), -1, 1)
-	new_wind.rpc(xval,yval)
+	var rand_angle = randf_range(0, 2 * PI)
+	new_wind.rpc(cos(rand_angle), sin(rand_angle));
 	wind_timer.start()
 
 @rpc("any_peer", "reliable")

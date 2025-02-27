@@ -12,7 +12,7 @@ signal collide(cannon: Area2D, body: Node2D)
 func _process(delta: float) -> void:
 	if !has_exploded:
 		var direction = shot_dir.dot(get_parent().currWind)
-		position += shot_dir * speed * delta + shot_dir * direction
+		position += shot_dir * speed * delta + shot_dir * direction * 0.3
 
 func on_timer_timeout() -> void:
 	has_exploded = true
