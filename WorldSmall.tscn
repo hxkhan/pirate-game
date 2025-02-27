@@ -3,7 +3,9 @@
 [ext_resource type="Script" path="res://World.gd" id="1_i8kwy"]
 [ext_resource type="TileSet" uid="uid://48g4cfmudeaq" path="res://TileSet.tres" id="2_mvckl"]
 [ext_resource type="PackedScene" uid="uid://c4kd1xnxoe828" path="res://Dock.tscn" id="3_i5wha"]
-[ext_resource type="Texture2D" uid="uid://c7cndslg4aoey" path="res://PNG/Wind_Arrow.png" id="4_1ko0e"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_rkeep"]
+load_path = "res://.godot/imported/WindArrow.png-02c9df73a0ee9161e458a015742b1bef.ctex"
 
 [node name="World" type="Node"]
 script = ExtResource("1_i8kwy")
@@ -174,8 +176,8 @@ layout_mode = 2
 text = "0"
 
 [node name="WindArrow" type="Sprite2D" parent="Overlay"]
-position = Vector2(1340, 84)
-scale = Vector2(4.75, 5.1875)
-texture = ExtResource("4_1ko0e")
+position = Vector2(1328, 92.5625)
+scale = Vector2(1.84375, 1.82617)
+texture = SubResource("CompressedTexture2D_rkeep")
 
 [connection signal="timeout" from="MatchTimer" to="." method="on_match_finish"]
