@@ -13,7 +13,41 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iak7f")
 
-[node name="NameOption" type="HBoxContainer" parent="."]
+[node name="Welcome" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Welcome"]
+layout_mode = 1
+offset_left = 53.0
+offset_top = 32.0
+offset_right = 398.0
+offset_bottom = 115.0
+theme_override_font_sizes/font_size = 60
+text = "Frigate Fury"
+
+[node name="Instructions" type="Label" parent="Welcome"]
+layout_mode = 1
+offset_left = 65.0
+offset_top = 158.0
+offset_right = 302.0
+offset_bottom = 259.0
+text = "Instructions:
+• Move with WASD
+• Aim with mouse
+• Shoot with left mouse button
+
+Free For All:
+• Kill everyone
+• Player with the most kills wins
+• Collect frigate tags from dead players
+• Heal or upgrade your ship with frigate tags"
+
+[node name="NameOption" type="HBoxContainer" parent="Welcome"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -27,13 +61,13 @@ offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LineEditName" type="LineEdit" parent="NameOption"]
+[node name="LineEditName" type="LineEdit" parent="Welcome/NameOption"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Choose a name"
 caret_blink = true
 
-[node name="Button" type="Button" parent="NameOption"]
+[node name="Button" type="Button" parent="Welcome/NameOption"]
 layout_mode = 2
 text = "Next"
 
@@ -141,46 +175,110 @@ layout_mode = 2
 [node name="PlayersList" type="VBoxContainer" parent="Lobby"]
 layout_mode = 2
 
-[node name="HSeparator2" type="HSeparator" parent="Lobby"]
+[node name="WorldSizeOptions" type="VBoxContainer" parent="Lobby"]
 layout_mode = 2
 
-[node name="Options" type="VBoxContainer" parent="Lobby"]
+[node name="HSeparator" type="HSeparator" parent="Lobby/WorldSizeOptions"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Lobby/Options"]
+[node name="Label" type="Label" parent="Lobby/WorldSizeOptions"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "World Size"
 
-[node name="SmallWorldType" type="HBoxContainer" parent="Lobby/Options"]
+[node name="SmallWorldType" type="HBoxContainer" parent="Lobby/WorldSizeOptions"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Lobby/Options/SmallWorldType"]
+[node name="Label" type="Label" parent="Lobby/WorldSizeOptions/SmallWorldType"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Small"
 
-[node name="CheckButton" type="CheckBox" parent="Lobby/Options/SmallWorldType"]
+[node name="CheckButton" type="CheckBox" parent="Lobby/WorldSizeOptions/SmallWorldType"]
 layout_mode = 2
 button_pressed = true
 button_group = SubResource("ButtonGroup_kl4ik")
 
-[node name="BigWorldType" type="HBoxContainer" parent="Lobby/Options"]
+[node name="BigWorldType" type="HBoxContainer" parent="Lobby/WorldSizeOptions"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Lobby/Options/BigWorldType"]
+[node name="Label" type="Label" parent="Lobby/WorldSizeOptions/BigWorldType"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Big"
 
-[node name="CheckButton" type="CheckBox" parent="Lobby/Options/BigWorldType"]
+[node name="CheckButton" type="CheckBox" parent="Lobby/WorldSizeOptions/BigWorldType"]
 layout_mode = 2
 button_group = SubResource("ButtonGroup_kl4ik")
+
+[node name="TuneSettings" type="VBoxContainer" parent="Lobby"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Lobby/TuneSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/TuneSettings"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Tune Settings"
+
+[node name="MaxSpeed" type="HBoxContainer" parent="Lobby/TuneSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/TuneSettings/MaxSpeed"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Max Speed: int"
+
+[node name="LineEdit" type="LineEdit" parent="Lobby/TuneSettings/MaxSpeed"]
+layout_mode = 2
+text = "160"
+alignment = 2
+
+[node name="TurnSpeed" type="HBoxContainer" parent="Lobby/TuneSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/TuneSettings/TurnSpeed"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Turn Speed: int"
+
+[node name="LineEdit" type="LineEdit" parent="Lobby/TuneSettings/TurnSpeed"]
+layout_mode = 2
+text = "40"
+alignment = 2
+
+[node name="Drag" type="HBoxContainer" parent="Lobby/TuneSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/TuneSettings/Drag"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Drag: int"
+
+[node name="LineEdit" type="LineEdit" parent="Lobby/TuneSettings/Drag"]
+layout_mode = 2
+text = "20"
+alignment = 2
+
+[node name="CannonDelay" type="HBoxContainer" parent="Lobby/TuneSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/TuneSettings/CannonDelay"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cannon Delay: float"
+
+[node name="LineEdit" type="LineEdit" parent="Lobby/TuneSettings/CannonDelay"]
+layout_mode = 2
+text = "0.666"
+alignment = 2
 
 [node name="ButtonStart" type="Button" parent="Lobby"]
 layout_mode = 2
 text = "Start Game"
 
-[connection signal="button_up" from="NameOption/Button" to="." method="on_name_next"]
+[connection signal="button_up" from="Welcome/NameOption/Button" to="." method="on_name_next"]
 [connection signal="button_up" from="GameModeOptions/ButtonFFA" to="." method="on_button_ffa_button_up"]
 [connection signal="button_up" from="ModeOptions/ButtonHost" to="." method="on_button_host_up"]
 [connection signal="button_up" from="ModeOptions/ButtonJoin" to="." method="on_button_join_up"]

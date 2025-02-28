@@ -28,6 +28,10 @@ func _ready():
 	# Spawn ourselves
 	var us = player.instantiate()
 	us.set_name("Player")
+	us.max_speed = Globals.max_speed
+	us.turn_speed = Globals.turn_speed
+	us.drag = Globals.drag
+	us.get_node("CannonBallTimer").wait_time = Globals.cannon_delay
 	us.shoot_cannon.connect(we_shot_cannon)
 	us.shoot_special.connect(we_shot_special)
 	us.we_died.connect(we_died)
@@ -78,6 +82,8 @@ func _input(event):
 			else:
 				$Overlay/Debug.show()
 				show_debug = true
+		elif event.keycode == KEY_I and multiplayer.is_server():
+			make_invisible.rpc()
 
 func peer_disconnected(peer):
 	print("Disconnected from peer with ID:", peer)
@@ -200,6 +206,13 @@ func dock_sunk(dock_name: String):
 @rpc("any_peer", "reliable")
 func kill_confirmed():
 	our_kills += 1
+
+# TEMPORARY
+@rpc("authority", "reliable")
+func make_invisible() -> void: 
+	var id = str(multiplayer.get_remote_sender_id())
+	get_node(id).visible = false
+	get_node(id).get_node("CollisionShape").queue_free()
 
 @rpc("any_peer", "reliable")
 func inform_stats(kills: int):

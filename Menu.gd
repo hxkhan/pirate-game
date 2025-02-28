@@ -8,8 +8,8 @@ func _ready():
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 
 func on_name_next():
-	Globals.player_name = $NameOption/LineEditName.text
-	$NameOption.hide()
+	Globals.player_name = $Welcome/NameOption/LineEditName.text
+	$Welcome.hide()
 	$GameModeOptions.show()
 
 func on_button_ffa_button_up():
@@ -49,7 +49,8 @@ func on_button_start_join_up():
 			$IPOptions.hide()
 			$Lobby.show()
 			$Lobby/ButtonStart.hide()
-			$Lobby/Options.hide()
+			$Lobby/WorldSizeOptions.hide()
+			$Lobby/TuneSettings.hide()
 			var lbl = Label.new()
 			lbl.text = "• " + Globals.player_name
 			$Lobby/PlayersList.add_child(lbl)
@@ -75,11 +76,16 @@ func set_player_name(name: String):
 	$Lobby/PlayersList.get_node(str(peer)).text = "• " + name
 
 func on_start_game():
+	Globals.max_speed = int($Lobby/TuneSettings/MaxSpeed/LineEdit.text)
+	Globals.turn_speed = float($Lobby/TuneSettings/TurnSpeed/LineEdit.text)
+	Globals.drag = float($Lobby/TuneSettings/Drag/LineEdit.text)
+	Globals.cannon_delay = float($Lobby/TuneSettings/CannonDelay/LineEdit.text)
+	
 	var docks = ["DockAlpha", "DockBeta", "DockCharlie", "DockDelta"]
 	docks.shuffle()
 	
 	var map = "small"
-	if $Lobby/Options/BigWorldType/CheckButton.button_pressed:
+	if $Lobby/WorldSizeOptions/BigWorldType/CheckButton.button_pressed:
 		map = "big"
 	
 	var world_instance 
@@ -93,7 +99,7 @@ func on_start_game():
 	# Assign docks to each player
 	var i = 1
 	for peer in multiplayer.get_peers():
-		start_game.rpc_id(peer, map, docks[i])
+		start_game.rpc_id(peer, map, docks[i], Globals.max_speed, Globals.turn_speed, Globals.drag, Globals.cannon_delay)
 		i += 1
 	
 	# Change scene
@@ -103,7 +109,12 @@ func on_start_game():
 
 
 @rpc("authority", "reliable")
-func start_game(map: String, dock_name: String):
+func start_game(map: String, dock_name: String, max_speed: int, turn_speed: int, drag: int, cannon_delay: float):
+	Globals.max_speed = max_speed
+	Globals.turn_speed = turn_speed
+	Globals.drag = drag
+	Globals.cannon_delay = cannon_delay
+	
 	var world_instance 
 	if map == "small":
 		world_instance = small_world.instantiate()

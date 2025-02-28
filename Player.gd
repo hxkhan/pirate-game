@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var max_health: int = 100
 
 @export var acceleration: int = 45
-@export var max_speed: int = 100
+@export var max_speed: int = 160
 @export var turn_speed: int = 40
 @export var drag: int = 20
 @export var turn_radius_curve: Curve
@@ -63,7 +63,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Calculate speeed
 	speed += acceleration * -input_dir.y * delta
-	speed = clamp(speed, -max_speed/3.0, max_speed+300)
+	speed = clamp(speed, -max_speed/3.0, max_speed)
 	
 	# Calculate drag
 	if input_dir.y == 0:
