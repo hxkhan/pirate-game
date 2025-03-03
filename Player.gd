@@ -105,6 +105,9 @@ func take_damage(amount: int, by: CharacterBody2D):
 	if health <= 0:
 		we_died.emit(by)
 
+func is_dead():
+	return health <= 0
+
 func reset(dock: Node2D):
 	$Sprite.texture = load(Globals.skin_names[skin][0])
 	frigate_tags = 1

@@ -152,7 +152,7 @@ func spawn_frigate_tags(tags: int, pos: Vector2):
 	var frigate_tags = frigate_tag.instantiate()
 	frigate_tags.value = tags
 	frigate_tags.position = pos
-	frigate_tags.pick_up_frigate_tags.connect(pick_up_frigate_tags)
+	frigate_tags.player_collide.connect(pick_up_frigate_tags)
 	# Use call_deferred to delay adding the child
 	call_deferred("add_child", frigate_tags)
 
@@ -162,9 +162,11 @@ func spawn_frigate_tags(tags: int, pos: Vector2):
 func despawn_frigate_tags():
 	print("Somebody picked em up")
 
-func pick_up_frigate_tags(value: int):
-	$Player.frigate_tags += value
-	despawn_frigate_tags.rpc()
+func pick_up_frigate_tags(tags: Area2D):
+	if not $Player.is_dead():
+		$Player.frigate_tags += tags.value
+		despawn_frigate_tags.rpc()
+		tags.queue_free()
 
 func we_died(by: CharacterBody2D):
 	update_basics.rpc($Player.position, $Player.rotation, $Player.health)
