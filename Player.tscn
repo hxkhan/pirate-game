@@ -25,7 +25,7 @@ polygon = PackedVector2Array(0.000198364, -25.7598, 14.0002, -24.2938, 22.0002, 
 [node name="Camera" type="Camera2D" parent="."]
 
 [node name="CannonBallTimer" type="Timer" parent="."]
-wait_time = 0.666
+wait_time = 0.75
 
 [node name="SpecialTimer" type="Timer" parent="."]
 wait_time = 10.0

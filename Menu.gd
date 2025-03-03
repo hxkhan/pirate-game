@@ -94,7 +94,7 @@ func on_start_game():
 	else:
 		world_instance = big_world.instantiate()
 		
-	world_instance.assigned_dock_name = docks[0]
+	world_instance.spawn_dock_name = docks[0]
 	
 	# Assign docks to each player
 	var i = 1
@@ -106,7 +106,6 @@ func on_start_game():
 	get_tree().root.add_child(world_instance)
 	get_tree().current_scene.queue_free()
 	get_tree().set_current_scene(world_instance)
-
 
 @rpc("authority", "reliable")
 func start_game(map: String, dock_name: String, max_speed: int, turn_speed: int, drag: int, cannon_delay: float):
@@ -121,7 +120,7 @@ func start_game(map: String, dock_name: String, max_speed: int, turn_speed: int,
 	else:
 		world_instance = big_world.instantiate()
 		
-	world_instance.assigned_dock_name = dock_name
+	world_instance.spawn_dock_name = dock_name
 	get_tree().root.add_child(world_instance)
 	get_tree().current_scene.queue_free()
 	get_tree().set_current_scene(world_instance)

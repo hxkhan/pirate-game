@@ -20,14 +20,12 @@ var last_position: Vector2
 var cannon_ball_recharged = true
 var special_recharged = true
 
-var input_disabled: bool = false
 var frigate_tags: int = 1
 
-var our_dock: Node2D
+func _ready():
+	$Camera.make_current()
 
 func _input(event: InputEvent) -> void:
-	if input_disabled:
-		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if cannon_ball_recharged:
 			var dir_vector = (get_global_mouse_position() - position).normalized()
@@ -47,8 +45,6 @@ func _input(event: InputEvent) -> void:
 				$SpecialTimer.start()
 
 func _physics_process(delta: float) -> void:
-	if input_disabled:
-		return
 	# Detect standstill collision
 	if is_on_wall():
 		if (last_position - position).length() < 0.1:
@@ -56,6 +52,8 @@ func _physics_process(delta: float) -> void:
 	last_position = position
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
+	if health <= 0:
+		input_dir = Vector2(0, 0)
 	
 	# Invert x input on reverse
 	if speed < 0:
@@ -106,12 +104,11 @@ func take_damage(amount: int, by: CharacterBody2D):
 	$Sprite.texture = load(skin_dir)
 	
 	if health <= 0:
-		input_disabled = true
 		we_died.emit(by)
 
-func reset():
+func reset(dock: Node2D):
 	$Sprite.texture = load(Globals.skin_names[skin][0])
-	position = our_dock.get_node("Spawn").global_position
-	rotation = our_dock.rotation
+	frigate_tags = 1
+	position = dock.get_node("Spawn").global_position
+	rotation = dock.rotation
 	health = max_health
-	input_disabled = false

@@ -1,22 +1,15 @@
 extends Area2D
 
 var value: int = 0
-var dropping_opponent: CharacterBody2D
 signal pick_up_frigate_tags(value:int)
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+var can_be_picked_up: bool = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _ready():
+	await get_tree().create_timer(0.1).timeout
+	can_be_picked_up = true
 
-
-func _on_body_entered(body: Node2D) -> void:
-	if body == dropping_opponent:
-		return
-	if body is CharacterBody2D:
+func on_body_entered(body):
+	if body is CharacterBody2D and body.name == "Player" and can_be_picked_up:
+		pick_up_frigate_tags.emit(value)
 		queue_free()
-		if body == get_node("/root/World/Player"):
-			pick_up_frigate_tags.emit(value)

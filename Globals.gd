@@ -6,7 +6,7 @@ var connected_players: Dictionary
 var max_speed: int = 160
 var turn_speed: int = 40
 var drag: int = 20
-var cannon_delay: float = 0.666
+var cannon_delay: float = 0.75
 
 var white_ships: Array[String] = [
 	"res://PNG/Default size/Ships/ship (1).png",
