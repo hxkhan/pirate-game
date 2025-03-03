@@ -44,9 +44,9 @@ func _ready():
 	if multiplayer.is_server():
 		# wind
 		wind_timer = Timer.new()
-		add_child(wind_timer)
-		wind_timer.connect("timeout",Callable(self,"_on_wind_timeout"))
+		wind_timer.timeout.connect(on_wind_timeout)
 		wind_timer.wait_time = 3.0
+		add_child(wind_timer)
 		wind_timer.start()
 		var rand_angle = randf_range(0, 2 * PI)
 		new_wind.rpc(cos(rand_angle), sin(rand_angle));
@@ -180,7 +180,7 @@ func we_died(by: CharacterBody2D):
 func new_wind(xval: float, yval: float) -> void: 
 	currWind = Vector2(xval, yval)
 
-func _on_wind_timeout() -> void:
+func on_wind_timeout() -> void:
 	var xval = clamp(currWind.x + randf_range(-0.25, 0.25), -1, 1)
 	var yval = clamp(currWind.y + randf_range(-0.25, 0.25), -1, 1)
 	new_wind.rpc(xval,yval)

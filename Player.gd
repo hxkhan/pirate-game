@@ -6,7 +6,7 @@ extends CharacterBody2D
 
 @export var acceleration: int = 45
 @export var max_speed: int = 160
-@export var turn_speed: int = 40
+@export var turn_speed: int = 45
 @export var drag: int = 20
 @export var turn_radius_curve: Curve
 
@@ -32,7 +32,6 @@ func _input(event: InputEvent) -> void:
 			shoot_cannon.emit(dir_vector)
 			cannon_ball_recharged = false
 			$CannonBallTimer.start()
-		print("still recharging")
 	if event is InputEventKey and event.pressed and special_recharged:
 		match event.keycode:
 			KEY_E:
@@ -88,7 +87,7 @@ func _on_special_timer_timeout() -> void:
 	special_recharged = true
 
 func take_damage(amount: int, by: CharacterBody2D):
-	# dont continue to take damage
+	# don't continue to take damage
 	if health <= 0:
 		return
 	

@@ -15,10 +15,6 @@ func _ready() -> void:
 	$SpawnTimer.start()
 	$CollisionShape2D.disabled = true
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func _on_spawn_timer_timeout() -> void:
 	if curr_sprite == 1:
 		curr_sprite = curr_sprite + 1

@@ -4,7 +4,7 @@ var player_name: String = "Player"
 var connected_players: Dictionary
 
 var max_speed: int = 160
-var turn_speed: int = 40
+var turn_speed: int = 45
 var drag: int = 20
 var cannon_delay: float = 0.75
 
