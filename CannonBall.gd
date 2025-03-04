@@ -2,7 +2,7 @@ extends Area2D
 
 var shot_dir : Vector2
 var shooter : CharacterBody2D
-var speed = 200
+var speed = 250
 var damage = 50
 var has_exploded: float
 
