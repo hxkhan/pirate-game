@@ -26,6 +26,7 @@ var frigate_tags: int = 1
 
 func _ready():
 	$Camera.make_current()
+	$Sprite.texture = load(Globals.skin_names[skin][0])
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

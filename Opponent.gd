@@ -1,6 +1,10 @@
 extends CharacterBody2D
 
-@export var skin: String = "WHITE"
+@export var skin: String = "WHITE":
+	set(value):
+		skin = value
+		$Sprite.texture = load(Globals.skin_names[skin][0])
+
 @export var max_health: int = 100
 @export var health: int = 100:
 	set(value):

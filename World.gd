@@ -1,6 +1,7 @@
 extends Node
 
 var spawn_dock_name: String = "DockDelta"
+var assigned_skin: String = "WHITE"
 var our_kills: int = 0
 
 var wind_timer: Timer
@@ -24,6 +25,7 @@ func _ready():
 	# Spawn ourselves
 	var us = player.instantiate()
 	us.set_name("Player")
+	us.skin = assigned_skin
 	us.max_speed = Globals.max_speed
 	us.turn_speed = Globals.turn_speed
 	us.drag = Globals.drag
@@ -37,6 +39,7 @@ func _ready():
 	
 	# Spawn opps
 	for peer in multiplayer.get_peers():
+		set_skin.rpc_id(peer, assigned_skin)
 		var inst = opp.instantiate()
 		inst.set_name(str(peer))
 		add_child(inst)
@@ -90,6 +93,11 @@ func peer_disconnected(peer):
 		for client in multiplayer.get_peers():
 			get_node(str(client)).queue_free()
 		multiplayer.multiplayer_peer.close()
+
+@rpc("any_peer", "reliable")
+func set_skin(skin_name):
+	var peer = get_node(str(multiplayer.get_remote_sender_id()))
+	peer.skin = skin_name
 
 @rpc("any_peer", "unreliable_ordered")
 func update_transform(pos, rot):

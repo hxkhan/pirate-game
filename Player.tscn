@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://l21oxh8t4u28" path="res://PNG/Default size/Ships/ship (1).png" id="2_cp13n"]
 
 [sub_resource type="Curve" id="Curve_bcbcq"]
-_data = [Vector2(0, 0.1), 0.0, 1.2, 0, 1, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), -1.0, 0.0, 1, 0]
-point_count = 3
+_data = [Vector2(0, 0.1), 0.0, 1.8, 0, 1, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.75), -1.0, 0.0, 1, 0]
+point_count = 4
 
 [node name="Player" type="CharacterBody2D"]
 motion_mode = 1

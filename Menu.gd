@@ -81,8 +81,11 @@ func on_start_game():
 	Globals.drag = float($Lobby/TuneSettings/Drag/LineEdit.text)
 	Globals.cannon_delay = float($Lobby/TuneSettings/CannonDelay/LineEdit.text)
 	
+	var skins = Globals.skin_names.keys()
 	var docks = ["DockAlpha", "DockBeta", "DockCharlie", "DockDelta"]
 	docks.shuffle()
+	skins.shuffle()
+	skins.erase("WHITE")
 	
 	var map = "small"
 	if $Lobby/WorldSizeOptions/BigWorldType/CheckButton.button_pressed:
@@ -95,11 +98,12 @@ func on_start_game():
 		world_instance = big_world.instantiate()
 		
 	world_instance.spawn_dock_name = docks[0]
+	world_instance.assigned_skin = skins[0]
 	
 	# Assign docks to each player
 	var i = 1
 	for peer in multiplayer.get_peers():
-		start_game.rpc_id(peer, map, docks[i], Globals.max_speed, Globals.turn_speed, Globals.drag, Globals.cannon_delay)
+		start_game.rpc_id(peer, map, docks[i], skins[i], Globals.max_speed, Globals.turn_speed, Globals.drag, Globals.cannon_delay)
 		i += 1
 	
 	# Change scene
@@ -108,7 +112,7 @@ func on_start_game():
 	get_tree().set_current_scene(world_instance)
 
 @rpc("authority", "reliable")
-func start_game(map: String, dock_name: String, max_speed: int, turn_speed: int, drag: int, cannon_delay: float):
+func start_game(map: String, dock_name: String, skin: String, max_speed: int, turn_speed: int, drag: int, cannon_delay: float):
 	Globals.max_speed = max_speed
 	Globals.turn_speed = turn_speed
 	Globals.drag = drag
@@ -121,6 +125,7 @@ func start_game(map: String, dock_name: String, max_speed: int, turn_speed: int,
 		world_instance = big_world.instantiate()
 		
 	world_instance.spawn_dock_name = dock_name
+	world_instance.assigned_skin = skin
 	get_tree().root.add_child(world_instance)
 	get_tree().current_scene.queue_free()
 	get_tree().set_current_scene(world_instance)
