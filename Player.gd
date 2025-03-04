@@ -105,7 +105,6 @@ func take_damage(amount: int, by: CharacterBody2D):
 	$Sprite.texture = load(skin_dir)
 	
 	if health <= 0:
-		$CollisionShape.disabled = true
 		we_died.emit(by)
 
 func is_dead():
@@ -117,4 +116,3 @@ func reset(dock: Node2D):
 	position = dock.get_node("Spawn").global_position
 	rotation = dock.rotation
 	health = max_health
-	$CollisionShape.disabled = false
