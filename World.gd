@@ -63,10 +63,11 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text += "\nTime Left: " + str(round($MatchTimer.time_left))
 	$Overlay/Debug.text += "\nWind dir: " + str(currWind.x) + ", " + str(currWind.y)
 	$Overlay/WindArrow.rotation = currWind.angle()
-	
+
+func _physics_process(delta):
 	# Send our own position if we have connected peers
 	if multiplayer.get_peers() and has_node("Player"):
-		update_basics.rpc($Player.position, $Player.rotation, $Player.health)
+		update_transform.rpc($Player.position, $Player.rotation)
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed():
@@ -91,10 +92,14 @@ func peer_disconnected(peer):
 		multiplayer.multiplayer_peer.close()
 
 @rpc("any_peer", "unreliable_ordered")
-func update_basics(pos, rot, hp):
+func update_transform(pos, rot):
 	var peer = get_node(str(multiplayer.get_remote_sender_id()))
 	peer.position = pos
 	peer.rotation = rot
+
+@rpc("any_peer", "reliable")
+func update_health(hp):
+	var peer = get_node(str(multiplayer.get_remote_sender_id()))
 	peer.health = hp
 
 @rpc("any_peer", "reliable")
@@ -104,7 +109,7 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.shooter = get_node(id)
 	cannon_shot.position = get_node(id).position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
-	cannon_shot.collide.connect(enemy_cannon_collision)
+	cannon_shot.hit_us.connect(we_have_been_hit_with_cannon)
 	add_child(cannon_shot)
 
 func we_shot_cannon(dir_vector: Vector2) -> void:
@@ -139,44 +144,33 @@ func we_shot_special(right_side: bool) -> void:
 		special.rotation = deg_to_rad(180)
 	$Player.add_child(special)
 
-func enemy_cannon_collision(shot: Area2D, body: Node2D):
-	if body == $Player:
-		$Player.take_damage(25, shot.shooter)
+func we_have_been_hit_with_cannon(shooter: CharacterBody2D):
+	$Player.take_damage(25, shooter)
+	update_health.rpc($Player.health)
 
 func we_have_been_hit_with_special(body: Node2D):
 	if body == $Player:
 		$Player.take_damage(50)
+		update_health.rpc($Player.health)
 
 @rpc("any_peer", "reliable", "call_local")
 func spawn_frigate_tags(tags: int, pos: Vector2):
 	var frigate_tags = frigate_tag.instantiate()
 	frigate_tags.value = tags
 	frigate_tags.position = pos
-	frigate_tags.player_collide.connect(pick_up_frigate_tags)
+	frigate_tags.pick_tags.connect(pick_up_frigate_tags)
 	# Use call_deferred to delay adding the child
 	call_deferred("add_child", frigate_tags)
 
-# we need to communicate which tags to despawn somehow
-# currently each tags spawned do not have some identity 
-@rpc("any_peer", "reliable")
-func despawn_frigate_tags():
-	print("Somebody picked em up")
-
-func pick_up_frigate_tags(tags: Area2D):
-	if not $Player.is_dead():
-		$Player.frigate_tags += tags.value
-		despawn_frigate_tags.rpc()
-		tags.queue_free()
+func pick_up_frigate_tags(value: int):
+	$Player.frigate_tags += value
 
 func we_died(by: CharacterBody2D):
-	update_basics.rpc($Player.position, $Player.rotation, $Player.health)
-	
 	kill_confirmed.rpc_id(int(str(by.name)))
 	spawn_frigate_tags.rpc($Player.frigate_tags, $Player.position)
 	
 	await get_tree().create_timer(3).timeout
 	respawn()
-
 
 @rpc("authority", "reliable", "call_local")
 func new_wind(xval: float, yval: float) -> void: 
@@ -241,3 +235,7 @@ func respawn():
 	
 	# Spawn at the safest dock
 	$Player.reset(safe_dock)
+	update_transform.rpc($Player.position, $Player.rotation)
+	# NEEDED
+	await get_tree().create_timer(0.1).timeout
+	update_health.rpc($Player.health)

@@ -5,9 +5,11 @@ extends CharacterBody2D
 @export var health: int = 100:
 	set(value):
 		health = clamp(value, 0, max_health)
-		$CollisionShape.disabled = false
 		var percent = (float(health) / max_health) * 100
 		var skin_dir = ""
+		
+		if percent > 0 and $CollisionShape.disabled:
+			$CollisionShape.set_deferred("disabled", false)
 		
 		if percent <= 0:
 			skin_dir = Globals.skin_names[skin][3]
@@ -20,3 +22,6 @@ extends CharacterBody2D
 			skin_dir = Globals.skin_names[skin][0]
 		
 		$Sprite.texture = load(skin_dir)
+
+func is_dead():
+	return health <= 0

@@ -6,7 +6,7 @@ var speed = 200
 var damage = 50
 var has_exploded: float
 
-signal collide(cannon: Area2D, body: Node2D)
+signal hit_us(shooter: CharacterBody2D)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -21,9 +21,10 @@ func on_timer_timeout() -> void:
 func on_body_entered(body: Node2D) -> void:
 	if body == shooter:
 		return
-	if body is CharacterBody2D or body.name == "Dock":
+	if body is CharacterBody2D:
 		on_timer_timeout()
-		collide.emit(self, body)
+		if body.name == "Player":
+			hit_us.emit(shooter)
 
 func on_animation_finished(name):
 	if name == "contact_solid":

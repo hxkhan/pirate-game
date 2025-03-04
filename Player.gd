@@ -4,6 +4,8 @@ extends CharacterBody2D
 @export var health: int = 100
 @export var max_health: int = 100
 
+@export var input_disabled: bool = false
+
 @export var acceleration: int = 45
 @export var max_speed: int = 160
 @export var turn_speed: int = 45
@@ -51,7 +53,7 @@ func _physics_process(delta: float) -> void:
 	last_position = position
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	if health <= 0:
+	if health <= 0 or input_disabled:
 		input_dir = Vector2(0, 0)
 	
 	# Invert x input on reverse
@@ -103,6 +105,7 @@ func take_damage(amount: int, by: CharacterBody2D):
 	$Sprite.texture = load(skin_dir)
 	
 	if health <= 0:
+		$CollisionShape.disabled = true
 		we_died.emit(by)
 
 func is_dead():
@@ -114,3 +117,4 @@ func reset(dock: Node2D):
 	position = dock.get_node("Spawn").global_position
 	rotation = dock.rotation
 	health = max_health
+	$CollisionShape.disabled = false
