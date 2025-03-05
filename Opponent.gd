@@ -17,7 +17,7 @@ extends CharacterBody2D
 		
 		if percent <= 0:
 			skin_dir = Globals.skin_names[skin][3]
-			$CollisionShape.disabled = true
+			$CollisionShape.set_deferred("disabled", true)
 		elif percent <= 25:
 			skin_dir = Globals.skin_names[skin][2]
 		elif percent <= 75:
