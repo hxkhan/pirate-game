@@ -122,10 +122,10 @@ func start_game(map: String, dock_name: String, skin: String, max_speed: int, tu
 		world_instance = big_world.instantiate()
 	
 	# match settings
-	world_instance.max_speed = max_speed
-	world_instance.turn_speed = turn_speed
-	world_instance.drag = drag
-	world_instance.cannon_delay = cannon_delay
+	Globals.max_speed = max_speed
+	Globals.turn_speed = turn_speed
+	Globals.drag = drag
+	Globals.cannon_delay = cannon_delay
 	
 	world_instance.spawn_dock_name = dock_name
 	world_instance.assigned_skin = skin

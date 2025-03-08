@@ -1,5 +1,10 @@
 extends Node
 
+var max_speed = 160
+var turn_speed = 45
+var drag = 20
+var cannon_delay = 0.75
+
 # peer id to player name
 var player_names: Dictionary = {1:"player"}
 
