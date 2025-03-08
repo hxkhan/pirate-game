@@ -3,11 +3,6 @@ extends Node
 # peer id to player name
 var player_names: Dictionary = {1:"player"}
 
-var max_speed: int = 160
-var turn_speed: int = 45
-var drag: int = 20
-var cannon_delay: float = 0.75
-
 var white_ships: Array[String] = [
 	"res://PNG/Default size/Ships/ship (1).png",
 	"res://PNG/Default size/Ships/ship (7).png",

@@ -2,7 +2,6 @@ extends Node
 
 var spawn_dock_name: String = "DockDelta"
 var assigned_skin: String = "WHITE"
-var our_kills: int = 0
 
 var wind_timer: Timer
 var currWind: Vector2 = Vector2(0,0)
@@ -14,6 +13,12 @@ var special_attack = preload("res://SpecialAttack.tscn")
 var frigate_tag = preload("res://FrigateTag.tscn")
 
 var player_kills: Dictionary
+
+# match settings
+var max_speed: int = 160
+var turn_speed: int = 45
+var drag: int = 20
+var cannon_delay: float = 0.75
 
 func _ready():
 	$Overlay/WindArrow.pivot_offset = $Overlay/WindArrow.icon.get_size() / 2
@@ -54,10 +59,10 @@ func _ready():
 	var us = player.instantiate()
 	us.set_name("Player")
 	us.skin = assigned_skin
-	us.max_speed = Globals.max_speed
-	us.turn_speed = Globals.turn_speed
-	us.drag = Globals.drag
-	us.cannon_ball_delay = Globals.cannon_delay
+	us.max_speed = max_speed
+	us.turn_speed = turn_speed
+	us.drag = drag
+	us.cannon_ball_delay = cannon_delay
 	us.shoot_cannon.connect(we_shot_cannon)
 	us.shoot_special.connect(we_shot_special)
 	us.we_died.connect(we_died)

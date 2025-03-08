@@ -77,11 +77,6 @@ func set_player_name(name: String):
 	$Lobby/PlayersList.get_node(str(peer)).text = "• " + name
 
 func on_start_game():
-	Globals.max_speed = int($Lobby/TuneSettings/MaxSpeed/LineEdit.text)
-	Globals.turn_speed = float($Lobby/TuneSettings/TurnSpeed/LineEdit.text)
-	Globals.drag = float($Lobby/TuneSettings/Drag/LineEdit.text)
-	Globals.cannon_delay = float($Lobby/TuneSettings/CannonDelay/LineEdit.text)
-	
 	var skins = Globals.skin_names.keys()
 	var docks = ["DockAlpha", "DockBeta", "DockCharlie", "DockDelta"]
 	docks.shuffle()
@@ -97,6 +92,12 @@ func on_start_game():
 		world_instance = small_world.instantiate()
 	else:
 		world_instance = big_world.instantiate()
+	
+	# match settings
+	world_instance.max_speed = int($Lobby/TuneSettings/MaxSpeed/LineEdit.text)
+	world_instance.turn_speed = float($Lobby/TuneSettings/TurnSpeed/LineEdit.text)
+	world_instance.drag = float($Lobby/TuneSettings/Drag/LineEdit.text)
+	world_instance.cannon_delay = float($Lobby/TuneSettings/CannonDelay/LineEdit.text)
 		
 	world_instance.spawn_dock_name = docks[0]
 	world_instance.assigned_skin = skins[0]
@@ -114,17 +115,18 @@ func on_start_game():
 
 @rpc("authority", "reliable")
 func start_game(map: String, dock_name: String, skin: String, max_speed: int, turn_speed: int, drag: int, cannon_delay: float):
-	Globals.max_speed = max_speed
-	Globals.turn_speed = turn_speed
-	Globals.drag = drag
-	Globals.cannon_delay = cannon_delay
-	
 	var world_instance 
 	if map == "small":
 		world_instance = small_world.instantiate()
 	else:
 		world_instance = big_world.instantiate()
-		
+	
+	# match settings
+	world_instance.max_speed = max_speed
+	world_instance.turn_speed = turn_speed
+	world_instance.drag = drag
+	world_instance.cannon_delay = cannon_delay
+	
 	world_instance.spawn_dock_name = dock_name
 	world_instance.assigned_skin = skin
 	get_tree().root.add_child(world_instance)

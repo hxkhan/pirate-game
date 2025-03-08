@@ -6,7 +6,7 @@ extends CharacterBody2D
 
 @export var input_disabled: bool = false
 
-@export var acceleration: int = 45
+@export var acceleration: int = 60
 @export var max_speed: int = 160
 @export var turn_speed: int = 45
 @export var drag: int = 20

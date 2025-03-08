@@ -32,20 +32,24 @@ text = "Frigate Fury"
 
 [node name="Instructions" type="Label" parent="Welcome"]
 layout_mode = 1
-offset_left = 65.0
-offset_top = 158.0
-offset_right = 302.0
-offset_bottom = 259.0
+offset_left = 58.0
+offset_top = 212.0
+offset_right = 612.0
+offset_bottom = 521.0
 text = "Instructions:
 • Move with WASD
 • Aim with mouse
-• Shoot with left mouse button
+• Shoot cannon with left mouse button
+• Perform special attack with Q or E for a left/right attack
+• To get the best turn radius, slow down a little to somehere
+   between 50-75% of max speed
+
 
 Free For All:
 • Kill everyone
 • Player with the most kills wins
 • Collect frigate tags from dead players
-• Heal or upgrade your ship with frigate tags"
+• Heal or upgrade your ship with frigate tags (Currently not in the game)"
 
 [node name="NameOption" type="HBoxContainer" parent="Welcome"]
 layout_mode = 1
