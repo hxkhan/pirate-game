@@ -1,16 +1,53 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhen3516ydv8o"]
+[gd_scene load_steps=11 format=3 uid="uid://bhen3516ydv8o"]
 
 [ext_resource type="Script" path="res://SpecialAttack.gd" id="1_isb5p"]
 [ext_resource type="Texture2D" uid="uid://07cob0gaubsn" path="res://PNG/Kenney Particle Pack/magic_01.png" id="2_qs8xs"]
+[ext_resource type="Texture2D" uid="uid://dx8gcm4r8uj0v" path="res://PNG/Kenney Particle Pack/magic_02.png" id="3_cwton"]
+[ext_resource type="Texture2D" uid="uid://djfoikx1640ba" path="res://PNG/Kenney Particle Pack/magic_03.png" id="4_x28wr"]
+[ext_resource type="Texture2D" uid="uid://c6yvu5wfvmohf" path="res://PNG/Kenney Particle Pack/magic_04.png" id="5_six8w"]
+[ext_resource type="Texture2D" uid="uid://nvbeirqgmyg7" path="res://PNG/Kenney Particle Pack/magic_05.png" id="6_l5umg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bboi0"]
 radius = 16.0
 
+[sub_resource type="Animation" id="Animation_rseuk"]
+resource_name = "perform"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Magic:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_qs8xs"), ExtResource("3_cwton"), ExtResource("4_x28wr"), ExtResource("5_six8w"), ExtResource("6_l5umg")]
+}
+
+[sub_resource type="Animation" id="Animation_8w22o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Magic:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_qs8xs")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3x6u4"]
+_data = {
+"RESET": SubResource("Animation_8w22o"),
+"perform": SubResource("Animation_rseuk")
+}
+
 [node name="SpecialAttack" type="Area2D"]
 script = ExtResource("1_isb5p")
-
-[node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 2.0
 
 [node name="Magic" type="Sprite2D" parent="."]
 scale = Vector2(0.1, 0.1)
@@ -19,5 +56,10 @@ texture = ExtResource("2_qs8xs")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_bboi0")
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3x6u4")
+}
+
+[connection signal="body_entered" from="." to="." method="on_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="on_animation_finished"]

@@ -57,7 +57,7 @@ func _ready():
 	us.max_speed = Globals.max_speed
 	us.turn_speed = Globals.turn_speed
 	us.drag = Globals.drag
-	us.get_node("CannonBallTimer").wait_time = Globals.cannon_delay
+	us.cannon_ball_delay = Globals.cannon_delay
 	us.shoot_cannon.connect(we_shot_cannon)
 	us.shoot_special.connect(we_shot_special)
 	us.we_died.connect(we_died)
@@ -160,16 +160,16 @@ func we_shot_cannon(dir_vector: Vector2) -> void:
 	
 @rpc("any_peer", "reliable")
 func enemy_shoot_special(right_side:bool) -> void:
-	var id = str(multiplayer.get_remote_sender_id())
-	var shooter = get_node(id)
+	var peer = get_node(str(multiplayer.get_remote_sender_id()))
 	var special = special_attack.instantiate()
 	if right_side:
 		special.position = Vector2(0,50)
 	else:
 		special.position = Vector2(0,-50)
 		special.rotation = deg_to_rad(180)
+	special.performer = peer
 	special.hit_us.connect(we_have_been_hit_with_special)
-	shooter.add_child(special)
+	peer.add_child(special)
 
 func we_shot_special(right_side: bool) -> void:
 	enemy_shoot_special.rpc(right_side)
@@ -185,10 +185,9 @@ func we_have_been_hit_with_cannon(shooter: CharacterBody2D):
 	$Player.take_damage(25, shooter)
 	update_health.rpc($Player.health)
 
-func we_have_been_hit_with_special(body: Node2D):
-	if body == $Player:
-		$Player.take_damage(50)
-		update_health.rpc($Player.health)
+func we_have_been_hit_with_special(by: CharacterBody2D):
+	$Player.take_damage(100, by)
+	update_health.rpc($Player.health)
 
 @rpc("any_peer", "reliable", "call_local")
 func spawn_frigate_tags(tags: int, pos: Vector2):
