@@ -162,24 +162,18 @@ func we_shot_cannon(dir_vector: Vector2) -> void:
 func enemy_shoot_special(right_side:bool) -> void:
 	var peer = get_node(str(multiplayer.get_remote_sender_id()))
 	var special = special_attack.instantiate()
-	if right_side:
-		special.position = Vector2(0,50)
-	else:
-		special.position = Vector2(0,-50)
-		special.rotation = deg_to_rad(180)
+	var offset = Vector2(0, 50).rotated(peer.rotation) * (1 if right_side else -1)
+	special.position = peer.position + offset
 	special.performer = peer
 	special.hit_us.connect(we_have_been_hit_with_special)
-	peer.add_child(special)
+	add_child(special)
 
 func we_shot_special(right_side: bool) -> void:
 	enemy_shoot_special.rpc(right_side)
 	var special = special_attack.instantiate()
-	if right_side:
-		special.position = Vector2(0,50)
-	else:
-		special.position = Vector2(0,-50)
-		special.rotation = deg_to_rad(180)
-	$Player.add_child(special)
+	var offset = Vector2(0, 50).rotated($Player.rotation) * (1 if right_side else -1)
+	special.position = $Player.position + offset
+	add_child(special)
 
 func we_have_been_hit_with_cannon(shooter: CharacterBody2D):
 	$Player.take_damage(25, shooter)
