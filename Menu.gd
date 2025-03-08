@@ -8,7 +8,6 @@ func _ready():
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 
 func on_name_next():
-	Globals.player_name = $Welcome/NameOption/LineEditName.text
 	$Welcome.hide()
 	$GameModeOptions.show()
 
@@ -25,8 +24,9 @@ func on_button_host_up():
 		multiplayer.set_multiplayer_peer(enet)
 		$ModeOptions.hide()
 		$Lobby.show()
+		Globals.player_names[1] = $Welcome/NameOption/LineEditName.text
 		var lbl = Label.new()
-		lbl.text = "• " + Globals.player_name
+		lbl.text = "• " + Globals.player_names[1]
 		$Lobby/PlayersList.add_child(lbl)
 
 func on_button_join_up():
@@ -51,15 +51,16 @@ func on_button_start_join_up():
 			$Lobby/ButtonStart.hide()
 			$Lobby/WorldSizeOptions.hide()
 			$Lobby/TuneSettings.hide()
+			Globals.player_names[multiplayer.get_unique_id()] = $Welcome/NameOption/LineEditName.text
 			var lbl = Label.new()
-			lbl.text = "• " + Globals.player_name
+			lbl.text = "• " + Globals.player_names[multiplayer.get_unique_id()]
 			$Lobby/PlayersList.add_child(lbl)
 	else:
 		print("Invalid IP Address")
 
 func peer_connected(peer):
 	print("Connected to peer with ID:", peer)
-	set_player_name.rpc_id(peer, Globals.player_name)
+	set_player_name.rpc_id(peer, Globals.player_names[multiplayer.get_unique_id()])
 	var lbl = Label.new()
 	lbl.text = "• Player " + str(peer)
 	lbl.set_name(str(peer))
@@ -67,12 +68,12 @@ func peer_connected(peer):
 
 func peer_disconnected(peer):
 	print("Disconnected from peer with ID:", peer)
-	Globals.connected_players.erase(peer)
+	Globals.player_names.erase(peer)
 
 @rpc("any_peer", "reliable")
 func set_player_name(name: String):
 	var peer = multiplayer.get_remote_sender_id()
-	Globals.connected_players[peer] = name
+	Globals.player_names[peer] = name
 	$Lobby/PlayersList.get_node(str(peer)).text = "• " + name
 
 func on_start_game():

@@ -16,7 +16,6 @@ signal shoot_cannon(dir_vector:Vector2)
 signal shoot_special()
 signal we_died(by: CharacterBody2D)
 
-var turn_radius: float = 0
 var speed: float = 0
 var last_position: Vector2
 var cannon_ball_recharged = true
@@ -29,6 +28,9 @@ func _ready():
 	$Sprite.texture = load(Globals.skin_names[skin][0])
 
 func _input(event: InputEvent) -> void:
+	if health <= 0 or input_disabled:
+		return
+	
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if cannon_ball_recharged:
 			var dir_vector = (get_global_mouse_position() - position).normalized()
@@ -50,7 +52,8 @@ func _physics_process(delta: float) -> void:
 	# Detect standstill collision
 	if is_on_wall():
 		if (last_position - position).length() < 0.1:
-			speed = 0
+			# allow player to come out of a corner without reversing like feedback said
+			speed = clamp(speed, -50/3, 50)
 	last_position = position
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
@@ -70,11 +73,7 @@ func _physics_process(delta: float) -> void:
 		speed = move_toward(speed, 0, drag * delta)
 	
 	# Calculate turn_radius
-	if speed != 0:
-		#turn_radius = turn_speed
-		turn_radius = turn_radius_curve.sample(abs(speed/max_speed)) * turn_speed
-	else:
-		turn_radius = 0
+	var turn_radius = turn_radius_curve.sample(abs(speed/max_speed)) * turn_speed
 	
 	rotation += input_dir.x * deg_to_rad(turn_radius) * delta
 	var direction = Vector2(cos(rotation), sin(rotation))

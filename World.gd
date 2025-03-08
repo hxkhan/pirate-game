@@ -13,6 +13,8 @@ var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
 var frigate_tag = preload("res://FrigateTag.tscn")
 
+var player_kills: Dictionary
+
 func _ready():
 	$Overlay/WindArrow.pivot_offset = $Overlay/WindArrow.icon.get_size() / 2
 	
@@ -21,6 +23,32 @@ func _ready():
 	Input.set_custom_mouse_cursor(cursor_texture, Input.CURSOR_ARROW, hotspot)
 	
 	multiplayer.peer_disconnected.connect(peer_disconnected)
+	
+	# Prep & UI stuff
+	var elem = $Overlay/PlayersList/Element
+	elem.set_name(str(multiplayer.get_unique_id()))
+	elem.get_node("Label").text = Globals.player_names[multiplayer.get_unique_id()] + " • 0 Kills"
+	elem.get_node("Image/Sprite").texture = load(Globals.skin_names[assigned_skin][0])
+	player_kills[multiplayer.get_unique_id()] = 0
+	
+	var elem_endgame = $Overlay/EndGame/Leaderboards/List/Element
+	elem_endgame.set_name(str(multiplayer.get_unique_id()))
+	elem_endgame.get_node("Name").text = Globals.player_names[multiplayer.get_unique_id()]
+	
+	for peer in multiplayer.get_peers():
+		player_kills[peer] = 0
+		
+		# Top left UI
+		var peer_elem = elem.duplicate()
+		peer_elem.set_name(str(peer))
+		peer_elem.get_node("Label").text = Globals.player_names[peer] + " • 0 Kills"
+		$Overlay/PlayersList.add_child(peer_elem)
+		
+		# End game UI
+		var peer_elem_endgame = elem_endgame.duplicate()
+		peer_elem_endgame.set_name(str(peer))
+		peer_elem_endgame.get_node("Name").text = Globals.player_names[peer]
+		$Overlay/EndGame/Leaderboards/List.add_child(peer_elem_endgame)
 	
 	# Spawn ourselves
 	var us = player.instantiate()
@@ -58,11 +86,11 @@ func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
 	if has_node("Player"):
 		$Overlay/Debug.text += "\nSpeed: " + str(round($Player.speed))
-		$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
+		#$Overlay/Debug.text += "\nVelocity: " + str(round($Player.velocity))
+		#$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
 		$Overlay/Debug.text += "\nHealth: " + str($Player.health)
 		$Overlay/Debug.text += "\nFrigate Tags: " + str($Player.frigate_tags)
-		
-	$Overlay/Debug.text += "\nKills: " + str(our_kills)
+	
 	$Overlay/Debug.text += "\nTime Left: " + str(round($MatchTimer.time_left))
 	$Overlay/Debug.text += "\nWind dir: " + str(currWind.x) + ", " + str(currWind.y)
 	$Overlay/WindArrow.rotation = currWind.angle()
@@ -96,8 +124,9 @@ func peer_disconnected(peer):
 
 @rpc("any_peer", "reliable")
 func set_skin(skin_name):
-	var peer = get_node(str(multiplayer.get_remote_sender_id()))
-	peer.skin = skin_name
+	var peer = str(multiplayer.get_remote_sender_id())
+	get_node(peer).skin = skin_name
+	$Overlay/PlayersList.get_node(peer).get_node("Image/Sprite").texture = load(Globals.skin_names[skin_name][0])
 
 @rpc("any_peer", "unreliable_ordered")
 func update_transform(pos, rot):
@@ -167,14 +196,13 @@ func spawn_frigate_tags(tags: int, pos: Vector2):
 	frigate_tags.value = tags
 	frigate_tags.position = pos
 	frigate_tags.pick_tags.connect(pick_up_frigate_tags)
-	# Use call_deferred to delay adding the child
 	call_deferred("add_child", frigate_tags)
 
 func pick_up_frigate_tags(value: int):
 	$Player.frigate_tags += value
 
 func we_died(by: CharacterBody2D):
-	kill_confirmed.rpc_id(int(str(by.name)))
+	got_killed.rpc(int(str(by.name)))
 	spawn_frigate_tags.rpc($Player.frigate_tags, $Player.position)
 	
 	await get_tree().create_timer(3).timeout
@@ -190,9 +218,10 @@ func on_wind_timeout() -> void:
 	new_wind.rpc(xval,yval)
 	wind_timer.start()
 
-@rpc("any_peer", "reliable")
-func kill_confirmed():
-	our_kills += 1
+@rpc("any_peer", "reliable", "call_local")
+func got_killed(by: int):
+	player_kills[by] = player_kills[by] + 1
+	$Overlay/PlayersList.get_node(str(by)).get_node("Label").text = Globals.player_names[by] + " • " + str(player_kills[by]) + " Kills"
 
 # TEMPORARY
 @rpc("authority", "reliable")
@@ -201,26 +230,25 @@ func make_invisible() -> void:
 	peer.visible = false
 	peer.get_node("CollisionShape").queue_free()
 
-@rpc("any_peer", "reliable")
-func inform_stats(kills: int):
-	var id = multiplayer.get_remote_sender_id()
-	var container = HBoxContainer.new()
-	var left = Label.new()
-	left.text = Globals.connected_players[id]
-	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	var right = Label.new()
-	right.text = str(kills)
-	container.add_child(left)
-	container.add_child(right)
-	$Overlay/EndGame/Leaderboards.add_child(container)
-
 func on_match_finish():
 	$Player.input_disabled = true
+	var leaderboard_entries = $Overlay/EndGame/Leaderboards/List.get_children()
+	
+	# Sort entries by kill count (highest to lowest)
+	leaderboard_entries.sort_custom(func(a, b): 
+		return player_kills[int(str(a.name))] > player_kills[int(str(b.name))]
+	)
+	
+	# Remove all entries from the list
+	for child in $Overlay/EndGame/Leaderboards/List.get_children():
+		$Overlay/EndGame/Leaderboards/List.remove_child(child)
+	
+	# Add them back in sorted order and set kill count text
+	for node in leaderboard_entries:
+		$Overlay/EndGame/Leaderboards/List.add_child(node)
+		node.get_node("Kills").text = str(player_kills[int(str(node.name))])
+	
 	$Overlay/EndGame.show()
-	inform_stats.rpc(our_kills)
-	$Overlay/EndGame/Leaderboards/Us/Kills.text = str(our_kills)
-	$Overlay/EndGame/Leaderboards/Us/Name.text = Globals.player_name
 
 func respawn():
 	var docks = get_tree().get_nodes_in_group("docks")

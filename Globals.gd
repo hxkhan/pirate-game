@@ -1,7 +1,7 @@
 extends Node
 
-var player_name: String = "Player"
-var connected_players: Dictionary
+# peer id to player name
+var player_names: Dictionary = {1:"player"}
 
 var max_speed: int = 160
 var turn_speed: int = 45
