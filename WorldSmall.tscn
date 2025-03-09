@@ -80,9 +80,9 @@ position = Vector2(761, 1154)
 
 [node name="Overlay" parent="." instance=ExtResource("4_1tfyk")]
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="MiddleArea" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MiddleArea"]
 position = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_1fjxx")
 

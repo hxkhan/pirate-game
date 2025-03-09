@@ -45,13 +45,18 @@ func _input(event: InputEvent) -> void:
 			await get_tree().create_timer(cannon_ball_delay).timeout
 			cannon_ball_recharged = true
 			
-	if event is InputEventKey and event.pressed and special_recharged and (event.keycode == KEY_E or event.keycode == KEY_Q):
-		special_recharged = false
-		shoot_special.emit(true if event.keycode == KEY_E else false)
+	if event is InputEventKey and event.pressed:
+		if special_recharged and (event.keycode == KEY_E or event.keycode == KEY_Q):
+			special_recharged = false
+			shoot_special.emit(true if event.keycode == KEY_E else false)
 		
-		# Reload special
-		await get_tree().create_timer(special_delay).timeout
-		special_recharged = true
+			# Reload special
+			await get_tree().create_timer(special_delay).timeout
+			special_recharged = true
+		
+		if event.keycode == KEY_SPACE:
+			print("E")
+
 
 func _physics_process(delta: float) -> void:
 	# Detect standstill collision

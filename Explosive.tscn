@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bk8xd2iajhf2m"]
+
+[ext_resource type="Script" path="res://Explosive.gd" id="1_k64br"]
+[ext_resource type="Texture2D" uid="uid://w4dxuj30lwop" path="res://Pack4/crateMetal.png" id="1_mfn6d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6raif"]
+size = Vector2(28, 28)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_k64br")
+
+[node name="CrateMetal" type="Sprite2D" parent="."]
+texture = ExtResource("1_mfn6d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6raif")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
