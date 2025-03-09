@@ -1,12 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://c4miuw6csc7hb"]
+[gd_scene load_steps=5 format=4 uid="uid://c4miuw6csc7hb"]
 
 [ext_resource type="Script" path="res://World.gd" id="1_i8kwy"]
 [ext_resource type="TileSet" uid="uid://48g4cfmudeaq" path="res://TileSet.tres" id="2_mvckl"]
 [ext_resource type="PackedScene" uid="uid://c4kd1xnxoe828" path="res://Dock.tscn" id="3_i5wha"]
 [ext_resource type="PackedScene" uid="uid://c0sjb42075js8" path="res://Overlay.tscn" id="4_1tfyk"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1fjxx"]
-size = Vector2(395, 397)
 
 [node name="World" type="Node"]
 script = ExtResource("1_i8kwy")
@@ -79,11 +76,5 @@ position = Vector2(-761, 1153)
 position = Vector2(761, 1154)
 
 [node name="Overlay" parent="." instance=ExtResource("4_1tfyk")]
-
-[node name="MiddleArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MiddleArea"]
-position = Vector2(0.5, 0.5)
-shape = SubResource("RectangleShape2D_1fjxx")
 
 [connection signal="timeout" from="MatchTimer" to="." method="on_match_finish"]

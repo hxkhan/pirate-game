@@ -28,7 +28,7 @@ var special_delay: float = 15
 
 var frigate_tags: int = 1
 
-var explosives: int = 2
+var explosives: int = 1
 
 func _ready():
 	$Camera.make_current()

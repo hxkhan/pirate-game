@@ -12,6 +12,7 @@ var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
 var frigate_tag = preload("res://FrigateTag.tscn")
 var explosive = preload("res://Explosive.tscn")
+var middlearea = preload("res://MiddleArea.tscn")
 
 var player_kills: Dictionary
 
@@ -71,6 +72,11 @@ func _ready():
 	us.position = get_node(spawn_dock_name).get_node("Spawn").global_position
 	us.rotation = get_node(spawn_dock_name).rotation
 	add_child(us)
+	
+	var midarea = middlearea.instantiate()
+	midarea.global_position = Vector2(0,0)
+	midarea.player_request_explosives.connect(player_buys_explosives)
+	add_child(midarea)
 	
 	# Spawn opps
 	for peer in multiplayer.get_peers():
@@ -295,3 +301,12 @@ func lay_explosive():
 func we_have_been_hit_by_explosive(shooter):
 	$Player.take_damage(99, shooter)
 	update_health.rpc($Player.health)
+
+func player_buys_explosives(body: Node2D):
+	var i = $Player.frigate_tags
+	var explosives_bought = 0
+	while (i >= 2):
+		i -= 2
+		explosives_bought += 1
+	$Player.frigate_tags = i
+	$Player.explosives += explosives_bought
