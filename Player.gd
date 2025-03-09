@@ -12,6 +12,7 @@ extends CharacterBody2D
 @export var drag: int = 20
 @export var turn_radius_curve: Curve
 
+signal place_explosive()
 signal shoot_cannon(dir_vector:Vector2)
 signal shoot_special(right_side: bool)
 signal we_died(by: CharacterBody2D)
@@ -26,6 +27,8 @@ var cannon_ball_delay: float = 0.75
 var special_delay: float = 15
 
 var frigate_tags: int = 1
+
+var explosives: int = 2
 
 func _ready():
 	$Camera.make_current()
@@ -55,7 +58,10 @@ func _input(event: InputEvent) -> void:
 			special_recharged = true
 		
 		if event.keycode == KEY_SPACE:
-			print("E")
+			print("explosives:" + str(explosives))
+			if explosives >= 1:
+				place_explosive.emit()
+				explosives -= 1
 
 
 func _physics_process(delta: float) -> void:

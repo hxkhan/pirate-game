@@ -11,6 +11,7 @@ var opp = preload("res://Opponent.tscn")
 var cannon_ball = preload("res://CannonBall.tscn")
 var special_attack = preload("res://SpecialAttack.tscn")
 var frigate_tag = preload("res://FrigateTag.tscn")
+var explosive = preload("res://Explosive.tscn")
 
 var player_kills: Dictionary
 
@@ -65,6 +66,7 @@ func _ready():
 	us.cannon_ball_delay = cannon_delay
 	us.shoot_cannon.connect(we_shot_cannon)
 	us.shoot_special.connect(we_shot_special)
+	us.place_explosive.connect(lay_explosive)
 	us.we_died.connect(we_died)
 	us.position = get_node(spawn_dock_name).get_node("Spawn").global_position
 	us.rotation = get_node(spawn_dock_name).rotation
@@ -272,4 +274,20 @@ func respawn():
 	update_transform.rpc($Player.position, $Player.rotation)
 	# NEEDED
 	await get_tree().create_timer(0.1).timeout
+	update_health.rpc($Player.health)
+
+@rpc("any_peer", "reliable")
+func enemy_laid_explosive(pos : Vector2):
+	var expl = explosive.instantiate()
+	var peer = get_node(str(multiplayer.get_remote_sender_id()))
+	expl.expl_owner = peer
+	expl.position = pos
+	expl.explosive_hit_us.connect(we_have_been_hit_by_explosive)
+	add_child(expl)
+
+func lay_explosive():
+	enemy_laid_explosive.rpc($Player.position)
+
+func we_have_been_hit_by_explosive(shooter):
+	$Player.take_damage(200, shooter)
 	update_health.rpc($Player.health)
