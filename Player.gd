@@ -58,7 +58,6 @@ func _input(event: InputEvent) -> void:
 			special_recharged = true
 		
 		if event.keycode == KEY_SPACE:
-			print("explosives:" + str(explosives))
 			if explosives >= 1:
 				place_explosive.emit()
 				explosives -= 1

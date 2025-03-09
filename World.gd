@@ -287,7 +287,11 @@ func enemy_laid_explosive(pos : Vector2):
 
 func lay_explosive():
 	enemy_laid_explosive.rpc($Player.position)
+	var expl = explosive.instantiate()
+	expl.expl_owner = $Player
+	expl.position = $Player.position
+	add_child(expl)
 
 func we_have_been_hit_by_explosive(shooter):
-	$Player.take_damage(200, shooter)
+	$Player.take_damage(99, shooter)
 	update_health.rpc($Player.health)
