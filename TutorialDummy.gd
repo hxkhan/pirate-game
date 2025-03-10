@@ -6,26 +6,28 @@ var max_health = 100
 signal dead_dummy()
 
 func cannon_hit():
-	health -= 25
-	update_skin()
-	if health <= 0:
-		await get_tree().create_timer(2).timeout
-		visible = false
-		await get_tree().create_timer(1).timeout
-		visible = true
-		health = 100
+	if health > 0:
+		health -= 25
 		update_skin()
+		if health <= 0:
+			await get_tree().create_timer(2).timeout
+			visible = false
+			await get_tree().create_timer(1).timeout
+			visible = true
+			health = 100
+			update_skin()
 
 func special_hit():
-	health -= 100
-	update_skin()
-	if health <= 0:
-		await get_tree().create_timer(2).timeout
-		visible = false
-		await get_tree().create_timer(1).timeout
-		visible = true
-		health = 100
+	if health > 0:
+		health -= 100
 		update_skin()
+		if health <= 0:
+			await get_tree().create_timer(2).timeout
+			visible = false
+			await get_tree().create_timer(1).timeout
+			visible = true
+			health = 100
+			update_skin()
 
 func update_skin():
 	var percent = (float(health)/max_health) * 100

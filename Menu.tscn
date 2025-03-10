@@ -193,7 +193,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Lobby/WorldSizeOptions"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "World Size"
+text = "Match Type"
 
 [node name="SmallWorldType" type="HBoxContainer" parent="Lobby/WorldSizeOptions"]
 layout_mode = 2
@@ -201,7 +201,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Lobby/WorldSizeOptions/SmallWorldType"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Small"
+text = "The Fury"
 
 [node name="CheckButton" type="CheckBox" parent="Lobby/WorldSizeOptions/SmallWorldType"]
 layout_mode = 2
@@ -209,6 +209,7 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_kl4ik")
 
 [node name="BigWorldType" type="HBoxContainer" parent="Lobby/WorldSizeOptions"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Lobby/WorldSizeOptions/BigWorldType"]
