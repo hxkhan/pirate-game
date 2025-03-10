@@ -309,7 +309,6 @@ func lay_explosive():
 func we_have_been_hit_by_explosive(shooter: CharacterBody2D, explosive: String):
 	$Player.take_damage(99, shooter)
 	if $Player.health < 0:
-		return
 		explosive_explode.rpc(explosive)
 	update_health.rpc($Player.health)
 

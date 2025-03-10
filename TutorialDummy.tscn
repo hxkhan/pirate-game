@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkgcjk6pa0i6w"]
+
+[ext_resource type="Texture2D" uid="uid://l21oxh8t4u28" path="res://PNG/Default size/Ships/ship (1).png" id="2_hqxs3"]
+
+[node name="Dummy" type="CharacterBody2D"]
+rotation = 0.0029907
+motion_mode = 1
+
+[node name="Sprite" type="Sprite2D" parent="."]
+rotation = -1.5708
+texture = ExtResource("2_hqxs3")
+
+[node name="CollisionShape" type="CollisionPolygon2D" parent="."]
+position = Vector2(19.2846, -6.25699e-05)
+rotation = -1.5708
+scale = Vector2(1, 2.72846)
+polygon = PackedVector2Array(0.000198364, -25.7598, 14.0002, -24.2938, 22.0002, -21.3617, 18.9999, 2.09478, 9.99985, 9.79143, -0.000183105, 13.4565, -10.0002, 9.7914, -19.0001, 2.09473, -21.9998, -20.9953, -13.9998, -24.2938)
