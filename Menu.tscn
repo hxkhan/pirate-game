@@ -52,6 +52,8 @@ Free For All:
 • Player with the most kills wins
 • Collect frigate tags from dead players
 • Buy explosives with frigate tags within the shop areas (marked with squares)
+• Explosives are automatically bought when area is entered
+• Each explosive costs 2 frigate tags
 • Place explosives with space"
 
 [node name="NameOption" type="HBoxContainer" parent="Welcome"]
