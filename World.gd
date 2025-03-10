@@ -24,6 +24,8 @@ var turn_speed: int = 45
 var drag: int = 20
 var cannon_delay: float = 0.75
 
+var match_duration 
+
 func _ready():
 	$Overlay/WindArrow.pivot_offset = $Overlay/WindArrow.icon.get_size() / 2
 	
@@ -102,19 +104,19 @@ func _ready():
 		tutorialdummy.global_position = Vector2(-1000,-500)
 		tutorialdummy.dead_dummy.connect(spawn_frigate_tags)
 		add_child(tutorialdummy)
-		
+	
+	if match_duration != null:
+		$MatchTimer.start(match_duration)
 
 func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
 	if has_node("Player"):
-		$Overlay/Debug.text += "\nSpeed: " + str(round($Player.speed))
-		#$Overlay/Debug.text += "\nVelocity: " + str(round($Player.velocity))
-		#$Overlay/Debug.text += "\nTurn Speed: " + str(round($Player.turn_radius))
+		$Overlay/Debug.text += "\nSpeed: " + str(round($Player.velocity.length()))
 		$Overlay/Debug.text += "\nHealth: " + str($Player.health)
 		$Overlay/Debug.text += "\nFrigate Tags: " + str($Player.frigate_tags)
 	
 	$Overlay/Debug.text += "\nTime Left: " + str(round($MatchTimer.time_left))
-	$Overlay/Debug.text += "\nWind dir: " + str(currWind.x) + ", " + str(currWind.y)
+	$Overlay/Debug.text += "\nWind dir: " + str(currWind.snapped(Vector2(0.1, 0.1)))
 	$Overlay/WindArrow.rotation = currWind.angle()
 
 func _physics_process(delta):

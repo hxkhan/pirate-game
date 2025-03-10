@@ -243,7 +243,21 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Tune Settings"
 
+[node name="MatchDuration" type="HBoxContainer" parent="Lobby/TuneSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/TuneSettings/MatchDuration"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Match Duration: seconds"
+
+[node name="LineEdit" type="LineEdit" parent="Lobby/TuneSettings/MatchDuration"]
+layout_mode = 2
+text = "300"
+alignment = 2
+
 [node name="MaxSpeed" type="HBoxContainer" parent="Lobby/TuneSettings"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Lobby/TuneSettings/MaxSpeed"]
@@ -257,6 +271,7 @@ text = "160"
 alignment = 2
 
 [node name="TurnSpeed" type="HBoxContainer" parent="Lobby/TuneSettings"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Lobby/TuneSettings/TurnSpeed"]
@@ -270,6 +285,7 @@ text = "45"
 alignment = 2
 
 [node name="Drag" type="HBoxContainer" parent="Lobby/TuneSettings"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Lobby/TuneSettings/Drag"]
@@ -283,6 +299,7 @@ text = "20"
 alignment = 2
 
 [node name="CannonDelay" type="HBoxContainer" parent="Lobby/TuneSettings"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Lobby/TuneSettings/CannonDelay"]
