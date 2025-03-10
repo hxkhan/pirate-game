@@ -2,6 +2,7 @@ extends Control
 
 var small_world = load("res://WorldSmall.tscn")
 var big_world = load("res://World.tscn")
+var tutorial_world = load("res://WorldTutorial.tscn")
 
 func _ready():
 	multiplayer.peer_connected.connect(peer_connected)
@@ -86,12 +87,17 @@ func on_start_game():
 	var map = "small"
 	if $Lobby/WorldSizeOptions/BigWorldType/CheckButton.button_pressed:
 		map = "big"
+	elif $Lobby/WorldSizeOptions/TutorialWorldType/CheckButton.button_pressed:
+		map = "tutorial"
+	
 	
 	var world_instance 
 	if map == "small":
 		world_instance = small_world.instantiate()
-	else:
+	elif map == "big":
 		world_instance = big_world.instantiate()
+	else:
+		world_instance = tutorial_world.instantiate()
 	
 	# match settings
 	world_instance.max_speed = int($Lobby/TuneSettings/MaxSpeed/LineEdit.text)
@@ -118,8 +124,10 @@ func start_game(map: String, dock_name: String, skin: String, max_speed: int, tu
 	var world_instance 
 	if map == "small":
 		world_instance = small_world.instantiate()
-	else:
+	elif map == "big":
 		world_instance = big_world.instantiate()
+	else:
+		world_instance = tutorial_world.instantiate()
 	
 	# match settings
 	Globals.max_speed = max_speed

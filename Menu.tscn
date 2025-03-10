@@ -220,6 +220,18 @@ text = "Big"
 layout_mode = 2
 button_group = SubResource("ButtonGroup_kl4ik")
 
+[node name="TutorialWorldType" type="HBoxContainer" parent="Lobby/WorldSizeOptions"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lobby/WorldSizeOptions/TutorialWorldType"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tutorial"
+
+[node name="CheckButton" type="CheckBox" parent="Lobby/WorldSizeOptions/TutorialWorldType"]
+layout_mode = 2
+button_group = SubResource("ButtonGroup_kl4ik")
+
 [node name="TuneSettings" type="VBoxContainer" parent="Lobby"]
 layout_mode = 2
 
