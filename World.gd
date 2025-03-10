@@ -24,7 +24,9 @@ var turn_speed: int = 45
 var drag: int = 20
 var cannon_delay: float = 0.75
 
-var match_duration 
+var match_duration
+
+var tutorialdummy
 
 func _ready():
 	$Overlay/WindArrow.pivot_offset = $Overlay/WindArrow.icon.get_size() / 2
@@ -100,7 +102,7 @@ func _ready():
 		new_wind.rpc(cos(rand_angle), sin(rand_angle));
 	
 	if name == "TutorialWorld":
-		var tutorialdummy = dummy.instantiate()
+		tutorialdummy = dummy.instantiate()
 		tutorialdummy.global_position = Vector2(-1000,-500)
 		tutorialdummy.dead_dummy.connect(spawn_frigate_tags)
 		add_child(tutorialdummy)
@@ -171,6 +173,8 @@ func enemy_shoot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.position = get_node(id).position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
 	cannon_shot.hit_us.connect(we_have_been_hit_with_cannon)
+	if tutorialdummy != null:
+		cannon_shot.hit_dummy.connect(tutorialdummy.cannon_hit)
 	add_child(cannon_shot)
 
 func we_shot_cannon(dir_vector: Vector2) -> void:
@@ -180,6 +184,8 @@ func we_shot_cannon(dir_vector: Vector2) -> void:
 	cannon_shot.shooter = $Player
 	cannon_shot.position = $Player.position + dir_vector * 30
 	cannon_shot.shot_dir = dir_vector
+	if tutorialdummy != null:
+		cannon_shot.hit_dummy.connect(tutorialdummy.cannon_hit)
 	add_child(cannon_shot)
 	
 @rpc("any_peer", "reliable")
@@ -190,6 +196,8 @@ func enemy_shoot_special(right_side:bool) -> void:
 	special.position = peer.position + offset
 	special.performer = peer
 	special.hit_us.connect(we_have_been_hit_with_special)
+	if tutorialdummy != null:
+		special.hit_dummy.connect(tutorialdummy.special_hit)
 	add_child(special)
 
 func we_shot_special(right_side: bool) -> void:
@@ -197,6 +205,8 @@ func we_shot_special(right_side: bool) -> void:
 	var special = special_attack.instantiate()
 	var offset = Vector2(0, 50).rotated($Player.rotation) * (1 if right_side else -1)
 	special.position = $Player.position + offset
+	if tutorialdummy != null:
+		special.hit_dummy.connect(tutorialdummy.special_hit)
 	add_child(special)
 
 func we_have_been_hit_with_cannon(shooter: CharacterBody2D):

@@ -8,6 +8,8 @@ var has_exploded: float
 
 signal hit_us(shooter: CharacterBody2D)
 
+signal hit_dummy()
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !has_exploded:
@@ -25,11 +27,9 @@ func on_body_entered(body: Node2D) -> void:
 		on_timer_timeout()
 		if body.name == "Player":
 			hit_us.emit(shooter)
+		elif body.name == "TutorialDummy":
+			hit_dummy.emit()
 
 func on_animation_finished(name):
 	if name == "contact_solid":
 		queue_free()
-
-func _on_area_entered(area: Area2D) -> void:
-	if area.name == "Dummy":
-		on_timer_timeout()
