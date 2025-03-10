@@ -3,9 +3,8 @@
 [ext_resource type="Script" path="res://TutorialDummy.gd" id="1_0fo05"]
 [ext_resource type="Texture2D" uid="uid://l21oxh8t4u28" path="res://PNG/Default size/Ships/ship (1).png" id="2_hqxs3"]
 
-[node name="Dummy" type="CharacterBody2D"]
+[node name="Dummy" type="Area2D"]
 rotation = 0.0029907
-motion_mode = 1
 script = ExtResource("1_0fo05")
 
 [node name="Sprite" type="Sprite2D" parent="."]
