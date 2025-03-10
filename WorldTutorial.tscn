@@ -69,10 +69,12 @@ position = Vector2(-660, -1218)
 rotation = -3.14159
 
 [node name="DockCharlie" parent="." groups=["docks"] instance=ExtResource("3_i242g")]
-position = Vector2(-740, -1609)
+position = Vector2(-881, -1630)
+rotation = 0.0171126
 
 [node name="DockDelta" parent="." groups=["docks"] instance=ExtResource("3_i242g")]
-position = Vector2(-908, -1608)
+position = Vector2(-543, -1482)
+rotation = 1.56246
 
 [node name="Overlay" parent="." instance=ExtResource("4_tc26w")]
 
