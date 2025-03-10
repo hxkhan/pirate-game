@@ -84,9 +84,9 @@ offset_top = -1432.0
 offset_right = -1128.0
 offset_bottom = -1170.0
 text = "Welcome to the Fury!
-You spawn with 1 frigate tag
-Kill an enemy to receive one more frigate tag!
-Move with WASD!
+You spawn with 1 frigate tag and 1 explosive!
+Kill an enemy to receive one more frigate tag
+Move with WASD
 Q/E = Special Magic attack
 Mouse button down = shoot cannon balls
 Space = spawn an explosive"
