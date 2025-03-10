@@ -284,25 +284,39 @@ func respawn():
 	update_health.rpc($Player.health)
 
 @rpc("any_peer", "reliable")
-func enemy_laid_explosive(pos : Vector2):
+func enemy_laid_explosive(pos: Vector2, string: String):
 	var expl = explosive.instantiate()
 	var peer = get_node(str(multiplayer.get_remote_sender_id()))
 	expl.expl_owner = peer
 	expl.position = pos
 	expl.explosive_hit_us.connect(we_have_been_hit_by_explosive)
+	expl.name = string
 	add_child(expl)
 
 func lay_explosive():
-	enemy_laid_explosive.rpc($Player.position)
+	var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-"
+	var string = "Explosive"
+	for i in range(20):
+		string += alphabet[randi() % alphabet.length()]
+	enemy_laid_explosive.rpc($Player.position, string)
 	var expl = explosive.instantiate()
 	expl.expl_owner = $Player
 	expl.position = $Player.position
 	expl.add_child(friendlyexplosive.instantiate())
+	expl.name = string
 	add_child(expl)
 
-func we_have_been_hit_by_explosive(shooter):
+func we_have_been_hit_by_explosive(shooter: CharacterBody2D, explosive: String):
 	$Player.take_damage(99, shooter)
+	if $Player.health < 0:
+		return
+		explosive_explode.rpc(explosive)
 	update_health.rpc($Player.health)
+
+@rpc("any_peer", "reliable")
+func explosive_explode(explosive: String):
+	var expl = get_node(explosive)
+	expl.get_node("AnimationPlayer").play("Explode")
 
 func player_buys_explosives(body: Node2D):
 	var i = $Player.frigate_tags

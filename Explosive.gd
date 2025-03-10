@@ -16,7 +16,7 @@ func on_body_entered(body: Node2D) -> void:
 	if body == expl_owner:
 		return
 	if body.name == "Player":
-		explosive_hit_us.emit(expl_owner)
+		explosive_hit_us.emit(expl_owner, name)
 	$AnimationPlayer.play("Explode")
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
