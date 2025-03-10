@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bk8xd2iajhf2m"]
+[gd_scene load_steps=12 format=3 uid="uid://bk8xd2iajhf2m"]
 
 [ext_resource type="Script" path="res://Explosive.gd" id="1_k64br"]
 [ext_resource type="Texture2D" uid="uid://w4dxuj30lwop" path="res://Pack4/crateMetal.png" id="1_mfn6d"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://cplchk12oanbx" path="res://Pack4/explosion3.png" id="5_lvkho"]
 [ext_resource type="Texture2D" uid="uid://c5r7i5660ucaa" path="res://Pack4/explosion4.png" id="6_cv6jy"]
 [ext_resource type="Texture2D" uid="uid://c1mqtgeepe4xy" path="res://Pack4/explosion5.png" id="7_u71og"]
-[ext_resource type="Texture2D" uid="uid://efgh1r5k46k7" path="res://Pack4/friendlyExplosive.png" id="8_hfcqc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6raif"]
 size = Vector2(28, 28)
@@ -77,11 +76,6 @@ script = ExtResource("1_k64br")
 
 [node name="CrateMetal" type="Sprite2D" parent="."]
 texture = ExtResource("1_mfn6d")
-
-[node name="FriendlyExplosive" type="Sprite2D" parent="."]
-visible = false
-scale = Vector2(0.52, 0.520001)
-texture = ExtResource("8_hfcqc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_6raif")

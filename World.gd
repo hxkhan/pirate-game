@@ -310,19 +310,23 @@ func lay_explosive():
 	var expl = explosive.instantiate()
 	expl.expl_owner = $Player
 	expl.position = $Player.position
-	expl.add_child(friendlyexplosive.instantiate())
+	var friendlyTag = friendlyexplosive.instantiate()
+	friendlyTag.name = "FriendlyTag"
+	expl.add_child(friendlyTag)
 	expl.name = string
 	add_child(expl)
 
 func we_have_been_hit_by_explosive(shooter: CharacterBody2D, explosive: String):
 	$Player.take_damage(99, shooter)
-	if $Player.health < 0:
-		explosive_explode.rpc(explosive)
+	explosive_explode.rpc(explosive)
 	update_health.rpc($Player.health)
+	get_node(explosive).get_node("AnimationPlayer").play("Explode")
 
 @rpc("any_peer", "reliable")
 func explosive_explode(explosive: String):
 	var expl = get_node(explosive)
+	if expl.has_node("FriendlyTag"):
+		expl.get_node("FriendlyTag").visible = false
 	expl.get_node("AnimationPlayer").play("Explode")
 
 func player_buys_explosives(body: Node2D):
