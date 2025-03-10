@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://c7ag02701igrw"]
+[gd_scene load_steps=6 format=4 uid="uid://cd1d2su8dh6h4"]
 
 [ext_resource type="Script" path="res://World.gd" id="1_g6k70"]
 [ext_resource type="TileSet" uid="uid://48g4cfmudeaq" path="res://TileSet.tres" id="2_ihqye"]
@@ -128,5 +128,20 @@ offset_right = -904.0
 offset_bottom = -311.0
 text = "Shoot the enemy or kill 
 them with magic attack!"
+
+[node name="PanelBlue4" type="Sprite2D" parent="."]
+position = Vector2(-398, 61.455)
+scale = Vector2(2.48845, 1.2909)
+texture = ExtResource("5_gkdjs")
+
+[node name="Label4" type="Label" parent="."]
+offset_left = -501.0
+offset_top = 10.0
+offset_right = -297.0
+offset_bottom = 116.0
+text = "Explosives only explode
+if someone drives into
+them.
+Try it on your friends!"
 
 [connection signal="timeout" from="MatchTimer" to="." method="on_match_finish"]
