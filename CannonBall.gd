@@ -29,3 +29,7 @@ func on_body_entered(body: Node2D) -> void:
 func on_animation_finished(name):
 	if name == "contact_solid":
 		queue_free()
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.name == "Dummy":
+		on_timer_timeout()
