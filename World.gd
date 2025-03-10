@@ -13,6 +13,7 @@ var special_attack = preload("res://SpecialAttack.tscn")
 var frigate_tag = preload("res://FrigateTag.tscn")
 var explosive = preload("res://Explosive.tscn")
 var middlearea = preload("res://MiddleArea.tscn")
+var friendlyexplosive = preload("res://FriendlyExplosiveOutline.tscn")
 
 var player_kills: Dictionary
 
@@ -296,6 +297,7 @@ func lay_explosive():
 	var expl = explosive.instantiate()
 	expl.expl_owner = $Player
 	expl.position = $Player.position
+	expl.add_child(friendlyexplosive.instantiate())
 	add_child(expl)
 
 func we_have_been_hit_by_explosive(shooter):
