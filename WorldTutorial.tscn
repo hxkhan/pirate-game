@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://cd1d2su8dh6h4"]
+[gd_scene load_steps=5 format=4 uid="uid://cd1d2su8dh6h4"]
 
 [ext_resource type="Script" path="res://World.gd" id="1_g6k70"]
 [ext_resource type="TileSet" uid="uid://48g4cfmudeaq" path="res://TileSet.tres" id="2_ihqye"]
 [ext_resource type="PackedScene" uid="uid://c4kd1xnxoe828" path="res://Dock.tscn" id="3_i242g"]
 [ext_resource type="PackedScene" uid="uid://c0sjb42075js8" path="res://Overlay.tscn" id="4_tc26w"]
-[ext_resource type="PackedScene" uid="uid://bkgcjk6pa0i6w" path="res://TutorialDummy.tscn" id="5_kw5r5"]
 
 [node name="World" type="Node"]
 script = ExtResource("1_g6k70")
@@ -113,8 +112,5 @@ offset_right = -917.0
 offset_bottom = -302.0
 text = "Shoot the enemy or kill 
 them with magic attack!"
-
-[node name="Dummy" parent="." instance=ExtResource("5_kw5r5")]
-position = Vector2(-1058, -504)
 
 [connection signal="timeout" from="MatchTimer" to="." method="on_match_finish"]

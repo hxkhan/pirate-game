@@ -98,6 +98,7 @@ func on_start_game():
 		world_instance = big_world.instantiate()
 	else:
 		world_instance = tutorial_world.instantiate()
+		world_instance.name = "TutorialWorld"
 	
 	# match settings
 	world_instance.max_speed = int($Lobby/TuneSettings/MaxSpeed/LineEdit.text)
@@ -128,6 +129,7 @@ func start_game(map: String, dock_name: String, skin: String, max_speed: int, tu
 		world_instance = big_world.instantiate()
 	else:
 		world_instance = tutorial_world.instantiate()
+		world_instance.name = "TutorialWorld"
 	
 	# match settings
 	Globals.max_speed = max_speed

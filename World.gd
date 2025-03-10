@@ -14,6 +14,7 @@ var frigate_tag = preload("res://FrigateTag.tscn")
 var explosive = preload("res://Explosive.tscn")
 var middlearea = preload("res://MiddleArea.tscn")
 var friendlyexplosive = preload("res://FriendlyExplosiveOutline.tscn")
+var dummy = preload("res://TutorialDummy.tscn")
 
 var player_kills: Dictionary
 
@@ -95,6 +96,13 @@ func _ready():
 		wind_timer.start()
 		var rand_angle = randf_range(0, 2 * PI)
 		new_wind.rpc(cos(rand_angle), sin(rand_angle));
+	
+	if name == "TutorialWorld":
+		var tutorialdummy = dummy.instantiate()
+		tutorialdummy.global_position = Vector2(-1000,-500)
+		tutorialdummy.dead_dummy.connect(spawn_frigate_tags)
+		add_child(tutorialdummy)
+		
 
 func _process(_delta: float) -> void:
 	$Overlay/Debug.text = "FPS: " + str(Engine.get_frames_per_second())
