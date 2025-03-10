@@ -40,7 +40,7 @@ text = "Instructions:
 • Move with WASD
 • Aim with mouse
 • Shoot cannon with left mouse button
-• Perform special attack with Q or E for a left/right attack
+• Perform special magic attack with Q or E for a left/right attack
 • To get the best turn radius, slow down a little to somehere
    between 50-75% of max speed
 
@@ -49,7 +49,8 @@ Free For All:
 • Kill everyone
 • Player with the most kills wins
 • Collect frigate tags from dead players
-• Heal or upgrade your ship with frigate tags (Currently not in the game)"
+• Buy explosives with frigate tags within the shop areas (marked with squares)
+• Place explosives with space"
 
 [node name="NameOption" type="HBoxContainer" parent="Welcome"]
 layout_mode = 1

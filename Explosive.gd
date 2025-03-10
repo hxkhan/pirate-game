@@ -15,9 +15,9 @@ func _process(delta: float) -> void:
 func on_body_entered(body: Node2D) -> void:
 	if body == expl_owner:
 		return
-	$AnimationPlayer.play("Explode")
 	if body.name == "Player":
 		explosive_hit_us.emit(expl_owner)
+	$AnimationPlayer.play("Explode")
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "Explode":
