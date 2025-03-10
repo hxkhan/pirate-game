@@ -112,7 +112,7 @@ func on_start_game():
 	# Assign docks to each player
 	var i = 1
 	for peer in multiplayer.get_peers():
-		start_game.rpc_id(peer, map, docks[i], skins[i], Globals.max_speed, Globals.turn_speed, Globals.drag, Globals.cannon_delay)
+		start_game.rpc_id(peer, map, docks[i], skins[i], world_instance.max_speed, world_instance.turn_speed, world_instance.drag, world_instance.cannon_delay)
 		i += 1
 	
 	# Change scene
@@ -132,10 +132,10 @@ func start_game(map: String, dock_name: String, skin: String, max_speed: int, tu
 		world_instance.name = "TutorialWorld"
 	
 	# match settings
-	Globals.max_speed = max_speed
-	Globals.turn_speed = turn_speed
-	Globals.drag = drag
-	Globals.cannon_delay = cannon_delay
+	world_instance.max_speed = max_speed
+	world_instance.turn_speed = turn_speed
+	world_instance.drag = drag
+	world_instance.cannon_delay = cannon_delay
 	
 	world_instance.spawn_dock_name = dock_name
 	world_instance.assigned_skin = skin
